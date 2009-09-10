@@ -1,0 +1,2 @@
+import(fda,lattice,mgcv)
+export(pendensity,plot.pendensity,test.equal,print.pendensity)

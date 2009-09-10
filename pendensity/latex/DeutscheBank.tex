@@ -1,0 +1,39 @@
+\HeaderA{DeutscheBank}{Daily final prices (DAX) of the German stock Deutsche Bank in the years 2006 and 2007}{DeutscheBank}
+\keyword{datasets}{DeutscheBank}
+\begin{Description}\relax
+Containing the daily final prices of the German stock Deutsche Bank in the years 2006 and 2007.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}data(DeutscheBank)\end{verbatim}
+\end{Usage}
+\begin{Format}\relax
+A data frame with 507 observations of the following 2 variables.
+\describe{
+\item[\code{Datum}] Data
+\item[\code{Schluss}] final price
+}
+\end{Format}
+\begin{Source}\relax
+www.handelsblatt.de
+\end{Source}
+\begin{Examples}
+\begin{ExampleCode}
+data(DeutscheBank)
+
+form<-'%d.%m.%y %H:%M'
+
+time.DeutscheBank <- strptime(DeutscheBank[,1],form)
+
+#looking for all dates in 2006
+data.DeutscheBank <- DeutscheBank[which(time.DeutscheBank$year==106),2]
+
+#building differences of first order
+DeutscheBank1 <- c()
+for(i in 2:length(data.DeutscheBank)) DeutscheBank1[i-1] <- data.DeutscheBank[i]-data.DeutscheBank[i-1]
+
+#estimating the density
+density.DeutscheBank <- pendensity(DeutscheBank1~1)
+plot(density.DeutscheBank)
+\end{ExampleCode}
+\end{Examples}
+

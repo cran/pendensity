@@ -1,0 +1,36 @@
+pendensity-package        package:pendensity        R Documentation
+
+_p_e_n_d_e_n_s_i_t_y _o_f_f_e_r_s _r_o_u_t_i_n_e_s _f_o_r _e_s_t_i_m_a_t_i_n_g _p_e_n_a_l_i_z_e_d _u_n_c_o_n_d_i_t_i_o_n_a_l _a_n_d _c_o_n_d_i_t_i_o_n_a_l (_o_n _f_a_c_t_o_r _g_r_o_u_p_s) _d_e_n_s_t_i_e_s.
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     Will follow soon.
+
+_D_e_t_a_i_l_s:
+
+
+       Package:   pendensity
+       Type:      Package
+       Version:   0.1
+       Date:      2009-07-29
+       License:   GPL-2
+       LazyLoad:  yes
+
+     The packages contributes one main funtion {\ttfamily pendensity()}
+     for estimating densities using penalized splines techniques.
+
+_A_u_t_h_o_r(_s):
+
+     Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>
+
+_R_e_f_e_r_e_n_c_e_s:
+
+     Penalized Density Estimation, Kauermann G. and Schellhase C.
+     (2009), to appear.
+
+_E_x_a_m_p_l_e_s:
+
+     y <- rnorm(100)
+     test <- pendensity(y~1)
+     plot(test)
+

@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Calculating new penalty paramater lambda</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for new.lambda {pendensity}"><tr><td>new.lambda {pendensity}</td><td align="right">R Documentation</td></tr></table>
+<h2>Calculating new penalty paramater lambda</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Calculating new penalty parameter lambda.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+new.lambda(penden.env,lambda0)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>penden.env</code></td>
+<td>
+Containing all information, environment of pendensity()</td></tr>
+<tr valign="top"><td><code>lambda0</code></td>
+<td>
+actual penalty parameter lambda</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Iterating for the lambda is stopped, when the changes between the old and the new lambda is smaller than 0.01*lambda0. If this criterion isn't reached, the iteration is terminated after 11 iterations.
+</p>
+<p>
+The iteration formulae is
+</p><p align="center"><i><i>&lambda;=(&beta;^T D_m &beta;)/(df(&lambda;)-(m-1)</i></i></p>
+
+
+<h3>Value</h3>
+
+<p>
+Returning the new lambda.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Christian Schellhase &lt;cschellhase@wiwi.uni-bielefeld.de&gt;
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Penalized Density Estimation, Kauermann G. and Schellhase C. (2009), to appear.
+</p>
+
+
+
+<hr><div align="center">[Package <em>pendensity</em> version 0.1 <a href="00Index.html">Index]</a></div>
+
+</body></html>

@@ -1,0 +1,200 @@
+pendensity            package:pendensity            R Documentation
+
+_C_a_l_c_u_l_a_t_i_n_g _p_e_n_a_l_i_z_e_d _d_e_n_s_i_t_y
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     Main program for estimation penalized densities. The estimation
+     can be done for response with or without any covariates. The
+     covariates have to be factors. The response is called 'y', the
+     covariates 'x'. We estimate densities using penalized splines.
+     This done by using a number of knots and a penalty parameter,
+     which are sufficient large. We penalize the m-order differences of
+     the beta-coefficients to estimate the weights 'ck' of the used
+     base functions..
+
+_U_s_a_g_e:
+
+     pendensity(form, base = "bspline", no.base = NULL, max.iter = 20,
+      lambda0 = 50000, q = 3, plot.bsp = FALSE, sort = TRUE, with.border = NULL, m = q)
+
+_A_r_g_u_m_e_n_t_s:
+
+    form: formula describing the density, the formula is
+
+                        y ~ x1 + x2 + ... + xn
+
+          where the 'x' have to be factors.
+
+    base: supported bases are "bspline" or "gaussian"
+
+ no.base: how many knots 'K', following the approach to use
+          2'no.base'+1 knots, if 'no.base' is NULL, default is K=41.
+
+max.iter: maximum number of iteration, the default is max.iter=20.
+
+ lambda0: start penalty parameter, the default is lambda0=50000
+
+       q: order of B-Spline base, the default is 'q=3'
+
+plot.bsp: TRUE or FALSE if the used B-Spline base should be plotted
+
+    sort: TRUE or FALSE if the response and the covariates should be
+          sorted
+
+with.border: determing the number of additional knots on the left and
+          the right of the support of the response. The number of knots
+          'no.base' is not influenced by this parameter. The amount of
+          knots 'no.base' are placed on the support of the response.
+          The amount of knots determined in 'with.border' is placed
+          outside the support and reduce the amount of knots on the
+          support about its value.
+
+       m: m-th order difference for penalization. Default is m=3.
+
+_D_e_t_a_i_l_s:
+
+     pendensity() begins with setting the parameters for the
+     estimation. Checking the formula and transfering the data into the
+     program, setting the knots and creating the base, depending on the
+     chosen parameter 'base'. Moreover the penalty matrix is
+     constructed. At the begining of the first iteration the beta
+     parameter are set equal to zero. With this setup, the first log
+     likelihood is calculated and is used for the first iteration for a
+     new beta parameter.
+      The iteration for a new beta parameter is done with a
+     Newton-Raphson-Iteration and implemented in the function
+     'new.beta.val'. We calculate the direction of the Newton Raphson
+     step for the known beta_t and iterate a step size bisection to
+     control the maximizing of the penalized likelihood 
+
+                           l(beta,lambda0)
+
+     . This means we set 
+
+ beta[t+1]=beta[t]-(2/v)*sp(beta,lambda0)*(-Jp(beta[t],lambda0))^-1
+
+     with s_p as penalized first order derivative and J_p as penalized
+     second order derivative. We begin with v=0. Not yielding a new
+     maximum for a current v, we increase v step by step respectively
+     bisect the step size. We terminate the iteration, if the step size
+     is smaller than some reference value epsilon (eps=1e-3) without
+     yielding a new maximum. We iterate for new parameter beta until
+     the new log likelihood depending on the new estimated parameter
+     beta differ less than 0.1 log-likelihood points from the log
+     likelihood estimated before.
+      After reaching the new parameter beta, we iterate for a new
+     penalty parameter lambda. This iteration is done by the function
+     'new.lambda'. The iteration formula is 
+
+           lambda^-1=beta^T Dm beta / (df(lambda)-p(m-1)).
+
+
+      The iteration for the new lambda is terminated, if the
+     approximate degree of freedom minus p*(m-1) is smaller than some
+     epsilon2 (eps2=0.01). Moreover, we terminate the iteration if the
+     new lambda is approximatively converted, i.e. the new lambda
+     differs only 0.001*old lambda (*) from the old lambda. If these
+     both criteria doesn't fit, the lambda iteration is terminated
+     after eleven iterations. 
+      We begin a new iteration with the new lambda, restarting with
+     parameter beta setting equal to zero again. This procedure is
+     repeated until convergence of lambda, i.e. that the new lambda
+     fulfills the criteria (*). If this criteria isnt't fulfilled after
+     20 iterations, the total iteration terminates.
+      After terminating all iterations, the final AIC, ck and beta are
+     saved in the output.
+      For speediness, all values, matrices, vectors etc. are saved in
+     an environment called 'penden.env'. Most of the used programs get
+     only this environment as input.
+
+_V_a_l_u_e:
+
+     Returning an object of class pendensity.
+
+_A_u_t_h_o_r(_s):
+
+     Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>
+
+_R_e_f_e_r_e_n_c_e_s:
+
+     Penalized Density Estimation, Kauermann G. and Schellhase C.
+     (2009), to appear.
+
+_S_e_e _A_l_s_o:
+
+     'new.lambda', 'new.beta.val'
+
+_E_x_a_m_p_l_e_s:
+
+     #first simple example
+
+     set.seed(27)
+
+     y <- rnorm(100)
+     test <- pendensity(y~1)
+
+     #plotting the estimated density
+     plot(test)
+
+     #expand the support at the boundary
+     test2 <- pendensity(y~1,with.border=8)
+     plot(test2)
+
+     #expand the support at the boundary and enlarge the number of knots to get the same number of knots in the support
+     test3 <- pendensity(y~1,with.border=8,no.base=28)
+     plot(test3)
+
+     test4 <- pendensity(y~1,with.border=10,no.base=35)
+     plot(test4)
+
+     #################
+
+     #second simple example
+     #with covariate
+
+     x <- rep(c(0,1),200)
+     y <- rnorm(400,x*0.2,1)
+     test <- pendensity(y~as.factor(x))
+     plot(test)
+
+     #################
+
+     #density-example of the stock exchange Allianz in 2006
+     data(Allianz)
+
+     form<-'%d.%m.%y %H:%M'
+
+     time.Allianz <- strptime(Allianz[,1],form)
+
+     #looking for all dates in 2006
+     data.Allianz <- Allianz[which(time.Allianz$year==106),2]
+
+     #building differences of first order
+     Allianz1 <- c()
+     for(i in 2:length(data.Allianz)) Allianz1[i-1] <- data.Allianz[i]-data.Allianz[i-1]
+
+     #estimating the density
+     density.Allianz <- pendensity(Allianz1~1)
+     plot(density.Allianz)
+
+     #################
+
+     #density-example of the stock exchange Allianz in 2006 and 2007
+     data(Allianz)
+
+     form<-'%d.%m.%y %H:%M'
+
+     time.Allianz <- strptime(Allianz[,1],form)
+
+     #looking for all dates in 2006
+     data.Allianz <- Allianz[which(time.Allianz$year==106|time.Allianz$year==107),2]
+
+     #building differences of first order
+     Allianz1 <- c()
+     for(i in 2:length(data.Allianz)) Allianz1[i-1] <- data.Allianz[i]-data.Allianz[i-1]
+
+     #estimating the density
+     density.Allianz <- pendensity(Allianz1~as.factor(time.Allianz$year))
+     plot(density.Allianz,legend.txt=c("2006","2007"))
+

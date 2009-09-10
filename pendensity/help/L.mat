@@ -1,0 +1,37 @@
+L.mat               package:pendensity               R Documentation
+
+_C_a_l_c_u_l_a_t_e_s _t_h_e _d_i_f_f_e_r_e_n_c_e _m_a_t_r_i_x _o_f _o_r_d_e_r _m
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     Calculating the differences matrix 'L' of order 'm', depending on
+     the number of knots 'k'.
+
+_U_s_a_g_e:
+
+     L.mat(penden.env)
+
+_A_r_g_u_m_e_n_t_s:
+
+penden.env: Environment of pendensity()
+
+_V_a_l_u_e:
+
+     Returns the difference matrix of order 'm' for given number of
+     knots 'K'.
+
+     The needed values are saved in the environment.
+
+_N_o_t_e:
+
+     Right now, the difference matrix is implemented for m=1,2,3,4.
+
+_A_u_t_h_o_r(_s):
+
+     Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>
+
+_R_e_f_e_r_e_n_c_e_s:
+
+     Penalized Density Estimation, Kauermann G. and Schellhase C.
+     (2009), to appear.
+

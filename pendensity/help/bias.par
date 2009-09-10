@@ -1,0 +1,41 @@
+bias.par             package:pendensity             R Documentation
+
+_C_a_l_c_u_l_a_t_i_n_g _t_h_e _b_i_a_s _o_f _t_h_e _p_a_r_a_m_a_t_e_r _b_e_t_a
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     Calculating the bias of the parameter beta.
+
+_U_s_a_g_e:
+
+     bias.par(penden.env)
+
+_A_r_g_u_m_e_n_t_s:
+
+penden.env: Containing all information, environment of pendensity()
+
+_D_e_t_a_i_l_s:
+
+     The bias of the parameter beta is calculated as the product of the
+     penalty parameter lambda, the penalzied second order derivative of
+     the log likelihood function w.r.t. beta 'Abl2.pen', the penalty
+     matrix 'Dm' and the parameter set 'beta'.
+
+             Bias(beta)=lambda Abl2.pen(beta)^-1 Dm beta
+
+
+     The needed values are saved in the environment.
+
+_V_a_l_u_e:
+
+     Returning the bias of the parameter beta.
+
+_A_u_t_h_o_r(_s):
+
+     Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>
+
+_R_e_f_e_r_e_n_c_e_s:
+
+     Penalized Density Estimation, Kauermann G. and Schellhase C.
+     (2009), to appear.
+

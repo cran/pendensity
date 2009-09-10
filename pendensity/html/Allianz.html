@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Daily final prices (DAX) of the German stock Allianz in the years 2006 and 2007</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for Allianz {pendensity}"><tr><td>Allianz {pendensity}</td><td align="right">R Documentation</td></tr></table>
+<h2>Daily final prices (DAX) of the German stock Allianz in the years 2006 and 2007</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Containing the daily final prices of the German stock Allianz in the years 2006 and 2007.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>data(Allianz)</pre>
+
+
+<h3>Format</h3>
+
+<p>
+A data frame with 507 observations of the following 2 variables.
+<dl>
+<dt><code>Datum</code></dt><dd>Data</dd>
+<dt><code>Schluss</code></dt><dd>final price</dd>
+</dl>
+
+<h3>Source</h3>
+
+<p>
+www.handelsblatt.de
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(Allianz)
+
+form&lt;-'%d.%m.%y %H:%M'
+
+time.Allianz &lt;- strptime(Allianz[,1],form)
+
+#looking for all dates in 2006
+data.Allianz &lt;- Allianz[which(time.Allianz$year==106),2]
+
+#building differences of first order
+Allianz1 &lt;- c()
+for(i in 2:length(data.Allianz)) Allianz1[i-1] &lt;- data.Allianz[i]-data.Allianz[i-1]
+
+#estimating the density
+density.Allianz &lt;- pendensity(Allianz1~1)
+plot(density.Allianz)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>pendensity</em> version 0.1 <a href="00Index.html">Index]</a></div>
+
+</body></html>

@@ -1,0 +1,31 @@
+\HeaderA{marg.likelihood}{Calculating the marginal likelihood}{marg.likelihood}
+\keyword{math}{marg.likelihood}
+\begin{Description}\relax
+Calculating the marginal likelihood.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+marg.likelihood(penden.env,pen.likelihood)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{penden.env}] Containing all information, environment of pendensity()
+\item[\code{pen.likelihood}] penalized log likelihood
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Calculating is done using a Laplace approximation for the integral of the marginal likelihood.
+
+The needed values are saved in the environment.
+\end{Details}
+\begin{Value}
+Returning the marginal likelihood.
+\end{Value}
+\begin{Author}\relax
+Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>
+\end{Author}
+\begin{References}\relax
+Penalized Density Estimation, Kauermann G. and Schellhase C. (2009), to appear.
+\end{References}
+

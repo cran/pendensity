@@ -1,0 +1,143 @@
+Entry: Abl1
+Aliases: Abl1
+Keywords: math
+Description: Calculating the first derivative of the pendensity likelihood function w.r.t. parameter beta
+URL: ../../../library/pendensity/html/Abl1.html
+
+Entry: Abl2
+Aliases: Abl2
+Keywords: math
+Description: Calculating the second order derivative with and without penalty
+URL: ../../../library/pendensity/html/Abl2.html
+
+Entry: Allianz
+Aliases: Allianz
+Keywords: datasets
+Description: Daily final prices (DAX) of the German stock Allianz in the years 2006 and 2007
+URL: ../../../library/pendensity/html/Allianz.html
+
+Entry: D.m
+Aliases: D.m
+Keywords: nonparametric
+Description: Calculating the penalty matrix
+URL: ../../../library/pendensity/html/D.m.html
+
+Entry: DeutscheBank
+Aliases: DeutscheBank
+Keywords: datasets
+Description: Daily final prices (DAX) of the German stock Deutsche Bank in the years 2006 and 2007
+URL: ../../../library/pendensity/html/DeutscheBank.html
+
+Entry: L.mat
+Aliases: L.mat
+Keywords: nonparametric
+Description: Calculates the difference matrix of order m
+URL: ../../../library/pendensity/html/L.mat.html
+
+Entry: bias.par
+Aliases: bias.par
+Keywords: nonparametric
+Description: Calculating the bias of the paramater beta
+URL: ../../../library/pendensity/html/bias.par.html
+
+Entry: ck
+Aliases: ck
+Keywords: nonparametric
+Description: Calculating the actual weights ck
+URL: ../../../library/pendensity/html/ck.html
+
+Entry: distr.func
+Aliases: distr.func distr.func.help cal.int poly.part
+Keywords: math
+Description: These functions are used for calculating the empirical and theorectical distribution functions.
+URL: ../../../library/pendensity/html/distr.func.html
+
+Entry: f.hat
+Aliases: f.hat
+Keywords: nonparametric
+Description: Calculating the actual fitted values of y
+URL: ../../../library/pendensity/html/f.hat.html
+
+Entry: marg.likelihood
+Aliases: marg.likelihood
+Keywords: math
+Description: Calculating the marginal likelihood
+URL: ../../../library/pendensity/html/marg.likelihood.html
+
+Entry: my.AIC
+Aliases: my.AIC
+Keywords: math
+Description: Calculating the AIC value
+URL: ../../../library/pendensity/html/my.AIC.html
+
+Entry: my.bspline
+Aliases: my.bspline
+Keywords: math
+Description: my.bspline
+URL: ../../../library/pendensity/html/my.bspline.html
+
+Entry: my.positive.definite.solve
+Aliases: my.positive.definite.solve
+Keywords: algebra
+Description: my.positive.definite.solve
+URL: ../../../library/pendensity/html/my.positive.definite.solve.html
+
+Entry: new.beta.val
+Aliases: new.beta.val
+Keywords: nonparametric
+Description: Calculating the new parameter beta
+URL: ../../../library/pendensity/html/new.beta.val.html
+
+Entry: new.lambda
+Aliases: new.lambda
+Keywords: nonparametric
+Description: Calculating new penalty paramater lambda
+URL: ../../../library/pendensity/html/new.lambda.html
+
+Entry: pen.log.like
+Aliases: pen.log.like
+Keywords: nonparametric
+Description: Calculating the log likelihood
+URL: ../../../library/pendensity/html/pen.log.like.html
+
+Entry: pendenForm
+Aliases: pendenForm string.help
+Keywords: IO
+Description: Formula interpretation and data transfer
+URL: ../../../library/pendensity/html/pendenForm.html
+
+Entry: pendensity-package
+Aliases: pendensity-package
+Keywords: nonparametric
+Description: pendensity offers routines for estimating penalized unconditional and conditional (on factor groups) densties.
+URL: ../../../library/pendensity/html/pendensity-package.html
+
+Entry: pendensity
+Aliases: pendensity
+Keywords: nonparametric
+Description: Calculating penalized density
+URL: ../../../library/pendensity/html/pendensity.html
+
+Entry: plot.pendensity
+Aliases: plot.pendensity plot
+Keywords: aplot
+Description: Plotting estimated penalized densities
+URL: ../../../library/pendensity/html/plot.pendensity.html
+
+Entry: test.equal
+Aliases: test.equal
+Keywords: nonparametric
+Description: Testing pairwise equality of densities
+URL: ../../../library/pendensity/html/test.equal.html
+
+Entry: variance.par
+Aliases: variance.par
+Keywords: nonparametric
+Description: Calculating the variance of the parameters
+URL: ../../../library/pendensity/html/variance.par.html
+
+Entry: variance.val
+Aliases: variance.val
+Keywords: nonparametric
+Description: Calculating the variances and standard deviance of each observation.
+URL: ../../../library/pendensity/html/variance.val.html

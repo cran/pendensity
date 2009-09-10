@@ -1,0 +1,88 @@
+my.bspline            package:pendensity            R Documentation
+
+_m_y._b_s_p_l_i_n_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     Integrates the normal B-Spline Base to a value of one. The
+     dimension of the base depends on the input of number of knots 'k'
+     and of the order of the B-Spline base 'q'.
+
+_U_s_a_g_e:
+
+     my.bspline(h, q, knots.val, y, K, plot.bsp)
+
+_A_r_g_u_m_e_n_t_s:
+
+       h: if equistant knots are just (default in pendensity()), h is
+          the distance between two neighbouring knots
+
+       q: selected order of the B-Spline base
+
+knots.val: selected values for the knots
+
+       y: values of the response variable y
+
+       K: the number of knots K for the construction of the base
+
+plot.bsp: Indicator variable TRUE/FALSE if the integrated B-Spline base
+          should be plotted
+
+_D_e_t_a_i_l_s:
+
+     Firstly, the function constructs the B-Spline base to the given
+     number of knots 'K' and the given locations of the knots
+     'knots.val$val. Due to the recursive construction of the B-Spline,
+     for all orders greater than 2, the dimension of the B-Spline base
+     of given K grows up with help.degree=q-2. Avoiding open B-Splines
+     at the boundary, we simulate 6 extra knots at both ends of the
+     support, saved in knots.val$all. Therefore, we get normal
+     B-Splines at the given knots 'knots.val$val'. For these knots, we
+     construct the B-Spline base of order 'q' and for order 'q+1'
+     (using for calculation the distribution). Additionally, we save
+     q-1 knots at both ends of the support of 'knots.val$val'. After
+     construction, we get a base of dimension K=K+help.degree. So, we
+     define our value K and cut our B-Spline base at both ends to get
+     the adequate base due to the order 'q' and the number of knots
+     'K'. For the base of order 'q+1', we need to get an additional
+     base, due to the construction of the B-Splines. Due to the fact,
+     that we use equidistant knots, we can integrad our B-Splines very
+     simple to the value of 1. The integration is done by the
+     well-known factor q/(knots.val$help[i+q]-knots.val$help[i]). This
+     results the standardisation coefficients 'stand.num' for each
+     B-spline (which are identically for equidistant knots). Moreover,
+     one can draw the integrated base and, if one calls this function
+     with the argument 'plot.bsp=TRUE'.
+
+_V_a_l_u_e:
+
+base.den: The integrated B-Spline base of order q
+
+base.den2: The integrated B-Spline base of order q+1
+
+stand.num: The coefficients for standardisation of the ordinary
+          B-Spline base
+
+knots.val: This return is a list. It consider of the used knots
+          'knots.val$val', the help knots 'knots.val$help' and the
+          additional knots 'knots.val$all', used for the construction
+          of the base and the calculation of the distribution function
+          of each B-Spline.
+
+       K: The transformed value of K, due to used order 'q' and the
+          input of 'K'
+
+help.degree: Due to the recursive construction of the B-Spline, for all
+          orders greater than 2, the dimension of the B-Spline base of
+          given K grows up with 'help.degree=q-2'. This value is
+          returned for later use.
+
+_N_o_t_e:
+
+     This functions uses the fda-package for the construction of the
+     B-Spline Base.
+
+_A_u_t_h_o_r(_s):
+
+     Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>
+
