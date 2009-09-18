@@ -1,0 +1,32 @@
+\HeaderA{variance.par}{Calculating the variance of the parameters}{variance.par}
+\keyword{nonparametric}{variance.par}
+\begin{Description}\relax
+Calculating the variance of the parameters of the estimation, depending on the second order derivative and the penalized second order derivative of the density estimation.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+variance.par(penden.env)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{penden.env}] Containing all information, environment of pendensity()
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+The variance of the parameters of the estimation results as the product of the invers of the penalized second order derivative times the second order derivative without penalization time the invers of the penalized second order derivative.
+
+\eqn{V(\beta, \lambda_0)=I_p^{-1}(\beta, \lambda) I_p(\beta, \lambda=0) I_p^{-1}(\beta, \lambda)}{} with \eqn{I_p(\beta^{-1}, \lambda)=E_{f(y)}\bigl\{J_p(\beta, \lambda)\bigr\}}{}
+
+The needed values are saved in the environment.
+\end{Details}
+\begin{Value}
+The return is a variance matrix of the dimension (K-1)x(K-1).
+\end{Value}
+\begin{Author}\relax
+Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>
+\end{Author}
+\begin{References}\relax
+Penalized Density Estimation, Kauermann G. and Schellhase C. (2009), to appear.
+\end{References}
+

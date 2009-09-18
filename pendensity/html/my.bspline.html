@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: my.bspline</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for my.bspline {pendensity}"><tr><td>my.bspline {pendensity}</td><td align="right">R Documentation</td></tr></table>
+<h2>my.bspline</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Integrates the normal B-Spline Base to a value of one. The dimension of the base depends on the input of number of knots 'k' and of the order of the B-Spline base 'q'.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+my.bspline(h, q, knots.val, y, K, plot.bsp)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>h</code></td>
+<td>
+if equistant knots are just (default in pendensity()), h is the distance between two neighbouring knots</td></tr>
+<tr valign="top"><td><code>q</code></td>
+<td>
+selected order of the B-Spline base</td></tr>
+<tr valign="top"><td><code>knots.val</code></td>
+<td>
+selected values for the knots</td></tr>
+<tr valign="top"><td><code>y</code></td>
+<td>
+values of the response variable y</td></tr>
+<tr valign="top"><td><code>K</code></td>
+<td>
+the number of knots K for the construction of the base</td></tr>
+<tr valign="top"><td><code>plot.bsp</code></td>
+<td>
+Indicator variable TRUE/FALSE if the integrated B-Spline base should be plotted</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Firstly, the function constructs the B-Spline base to the given number of knots 'K' and the given locations of the knots 'knots.val$val. Due to the recursive construction of the B-Spline, for all orders greater than 2, the dimension of the B-Spline base of given K grows up with help.degree=q-2. Avoiding open B-Splines at the boundary, we simulate 6 extra knots at both ends of the support, saved in knots.val$all. Therefore, we get normal B-Splines at the given knots 'knots.val$val'. For these knots, we construct the B-Spline base of order 'q' and for order 'q+1' (using for calculation the distribution). Additionally, we save q-1 knots at both ends of the support of 'knots.val$val'. After construction, we get a base of dimension K=K+help.degree. So, we define our value K and cut our B-Spline base at both ends to get the adequate base due to the order 'q' and the number of knots 'K'. For the base of order 'q+1', we need to get an additional base, due to the construction of the B-Splines. Due to the fact, that we use equidistant knots, we can integrad our B-Splines very simple to the value of 1. The integration is done by the well-known factor q/(knots.val$help[i+q]-knots.val$help[i]). This results the standardisation coefficients 'stand.num' for each B-spline (which are identically for equidistant knots). Moreover, one can draw the integrated base and, if one calls this function with the argument 'plot.bsp=TRUE'.
+</p>
+
+
+<h3>Value</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>base.den</code></td>
+<td>
+The integrated B-Spline base of order q</td></tr>
+<tr valign="top"><td><code>base.den2</code></td>
+<td>
+The integrated B-Spline base of order q+1</td></tr>
+<tr valign="top"><td><code>stand.num</code></td>
+<td>
+The coefficients for standardisation of the ordinary B-Spline base</td></tr>
+<tr valign="top"><td><code>knots.val</code></td>
+<td>
+This return is a list. It consider of the used knots 'knots.val$val', the help knots 'knots.val$help' and the additional knots 'knots.val$all', used for the construction of the base and the calculation of the distribution function of each B-Spline.</td></tr>
+<tr valign="top"><td><code>K</code></td>
+<td>
+The transformed value of K, due to used order 'q' and the input of 'K'</td></tr>
+<tr valign="top"><td><code>help.degree</code></td>
+<td>
+Due to the recursive construction of the B-Spline, for all orders greater than 2, the dimension of the B-Spline base of given K grows up with 'help.degree=q-2'. This value is returned for later use.</td></tr>
+</table>
+
+<h3>Note</h3>
+
+<p>
+This functions uses the fda-package for the construction of the B-Spline Base.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Christian Schellhase &lt;cschellhase@wiwi.uni-bielefeld.de&gt;
+</p>
+
+
+
+<hr><div align="center">[Package <em>pendensity</em> version 0.1 <a href="00Index.html">Index]</a></div>
+
+</body></html>

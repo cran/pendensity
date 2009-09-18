@@ -1,0 +1,35 @@
+Abl1                    Calculating the first derivative of the
+                        pendensity likelihood function w.r.t. parameter
+                        beta
+Abl2                    Calculating the second order derivative with
+                        and without penalty
+Allianz                 Daily final prices (DAX) of the German stock
+                        Allianz in the years 2006 and 2007
+D.m                     Calculating the penalty matrix
+DeutscheBank            Daily final prices (DAX) of the German stock
+                        Deutsche Bank in the years 2006 and 2007
+L.mat                   Calculates the difference matrix of order m
+bias.par                Calculating the bias of the paramater beta
+ck                      Calculating the actual weights ck
+distr.func              These functions are used for calculating the
+                        empirical and theorectical distribution
+                        functions.
+f.hat                   Calculating the actual fitted values of y
+marg.likelihood         Calculating the marginal likelihood
+my.AIC                  Calculating the AIC value
+my.bspline              my.bspline
+my.positive.definite.solve
+                        my.positive.definite.solve
+new.beta.val            Calculating the new parameter beta
+new.lambda              Calculating new penalty paramater lambda
+pen.log.like            Calculating the log likelihood
+pendenForm              Formula interpretation and data transfer
+pendensity              Calculating penalized density
+pendensity-package      pendensity offers routines for estimating
+                        penalized unconditional and conditional (on
+                        factor groups) densties.
+plot.pendensity         Plotting estimated penalized densities
+test.equal              Testing pairwise equality of densities
+variance.par            Calculating the variance of the parameters
+variance.val            Calculating the variances and standard deviance
+                        of each observation.

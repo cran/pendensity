@@ -1,0 +1,26 @@
+\HeaderA{variance.val}{Calculating the variances and standard deviance of each observation.}{variance.val}
+\keyword{nonparametric}{variance.val}
+\begin{Description}\relax
+Calculating the variances and standard deviance of each observation for which 'base.den' has been created. Therefore we use the variance of the parameter set beta 'var.par'.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+variance.val(base.den, var.par, weight, K, x, list.len, Z, x.factor)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{base.den}] base values
+\item[\code{var.par}] variance of the parameter set beta
+\item[\code{weight}] weights ck
+\item[\code{K}] number of knots
+\item[\code{x}] covariates
+\item[\code{list.len}] number of covariate combinations
+\item[\code{Z}] covariate matrix
+\item[\code{x.factor}] list of covariate combinations
+\end{ldescription}
+\end{Arguments}
+\begin{Value}
+Returning a vector with the standard deviance of each observation for which 'base.den' has been created.
+\end{Value}
+

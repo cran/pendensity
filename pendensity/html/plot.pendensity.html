@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Plotting estimated penalized densities</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for plot.pendensity {pendensity}"><tr><td>plot.pendensity {pendensity}</td><td align="right">R Documentation</td></tr></table>
+<h2>Plotting estimated penalized densities</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Plotting estimated penalized densities, need object of class 'pendensity'.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'pendensity':
+plot(x, plot.val = 1, latt = FALSE, kernel = FALSE, confi = TRUE,
+ main = NULL, sub = NULL, xlab = NULL, ylab = NULL, plot.base = FALSE,
+ lwd=NULL,legend.txt=NULL,...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+object of class pendensity</td></tr>
+<tr valign="top"><td><code>plot.val</code></td>
+<td>
+if plot.val=1 the density is plotted, if plot.val=2 the distribution on the observation values is plotted, if plot.val=3 the distribution is plotted as function</td></tr>
+<tr valign="top"><td><code>latt</code></td>
+<td>
+TRUE/FALSE if the lattice interface should be used for ploting, default=FALSE</td></tr>
+<tr valign="top"><td><code>kernel</code></td>
+<td>
+TRUE/FALSE if a kernel density estimation should be added to the density plots, default=FALSE</td></tr>
+<tr valign="top"><td><code>confi</code></td>
+<td>
+TRUE/FALSE if confidence intervals should be added to the density plots, default=TRUE </td></tr>
+<tr valign="top"><td><code>main</code></td>
+<td>
+Main of the density plot, if NULL main contains settings 'K', 'AIC' and 'lambda0' of the estimation</td></tr>
+<tr valign="top"><td><code>sub</code></td>
+<td>
+sub of the density plot, if NULL sub contains settings used base 'base' and used order of B-Spline 'q'</td></tr>
+<tr valign="top"><td><code>xlab</code></td>
+<td>
+xlab of the density plot, if NULL xlab contains 'y'</td></tr>
+<tr valign="top"><td><code>ylab</code></td>
+<td>
+ylab of the density plot, if NULL ylab contains 'density'</td></tr>
+<tr valign="top"><td><code>plot.base</code></td>
+<td>
+TRUE/FALSE if the weighted base should be added to the density plot, default=FALSE</td></tr>
+<tr valign="top"><td><code>lwd</code></td>
+<td>
+lwd of the lines of density plot, if NULL lwd=3, the confidence bands are plotted with lwd=2</td></tr>
+<tr valign="top"><td><code>legend.txt</code></td>
+<td>
+if FALSE no legend is plotted, legend.txt can get a vector of chracters with length of the groupings. legend.txt works only for plot.val=1</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+further arguments</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Each grouping of factors is plotted. Therefore, equidistant help values are constructed in the support of the response for each grouping of factors. Weighting these help values with knots weights ck results in the density estimation for each grouping of factors. If asked for, pointwise confidence intervals are computed and plotted.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+If the density function is ploted, function returns two values
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>help.env</code></td>
+<td>
+Contains the constructed help values for the response, the corresponding values for the densities and if asked for the calculated confidence intervals</td></tr>
+<tr valign="top"><td><code>combi</code></td>
+<td>
+list of all combinations of the covariates</td></tr>
+<tr valign="top"><td><code>y</code></td>
+<td>
+containing the observed values y</td></tr>
+<tr valign="top"><td><code>sum</code></td>
+<td>
+containing the empirical distribution of each observation y</td></tr>
+</table>
+<p>
+
+If the theoretical distribution function is plotted, the function returns an environment. For plotting the theoretical distributions, each interval between two knots is evaluated at 100 equidistant simulated points between the two knots considered. These points are saved in the environment with the name "paste("x",i,sep="")" for each interval i, the calculated distribution is save with the name "paste("F(x)",i,sep="")" for each interval i. For these points, the distribution is calculated.</p>
+
+<h3>Note</h3>
+
+<p>
+For plotting the density and e.g. the empirical distributions, use e.g. 'X11()' before calling the second plot to open a new graphic device.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Christian Schellhase &lt;cschellhase@wiwi.uni-bielefeld.de&gt;
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Penalized Density Estimation, Kauermann G. and Schellhase C. (2009), to appear.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+y &lt;- rnorm(100)
+test &lt;- pendensity(y~1)
+plot(test)
+
+#empirical distribution
+plot(test,plot.val=2)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>pendensity</em> version 0.1 <a href="00Index.html">Index]</a></div>
+
+</body></html>

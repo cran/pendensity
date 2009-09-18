@@ -1,0 +1,70 @@
+distr.func            package:pendensity            R Documentation
+
+_T_h_e_s_e _f_u_n_c_t_i_o_n_s _a_r_e _u_s_e_d _f_o_r _c_a_l_c_u_l_a_t_i_n_g _t_h_e _e_m_p_i_r_i_c_a_l _a_n_d _t_h_e_o_r_e_c_t_i_c_a_l _d_i_s_t_r_i_b_u_t_i_o_n _f_u_n_c_t_i_o_n_s.
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     These functions cooperate with each other for calculating the
+     distribution functions. 'distr.func' is the main program, calling
+     'distr.func.help',generating an environment with needed values for
+     calculating the distribution of each interval between two
+     neighbouring knots. 'distr.func' returns analytical functions of
+     the distribution of each interval between two neighbouring knots.
+     Therefore the function 'poly.part' is needed to construct these
+     funtions. 'cal.int' evaluates these intergrals, considering if the
+     whole interval should be evaluated or if any discrete value 'yi'
+     is of interest.
+
+_U_s_a_g_e:
+
+     distr.func(yi = NULL, obj, help.env=distr.func.help(obj))
+     distr.func.help(obj)
+     cal.int(len.b, q, help.env, knots.val)
+     poly.part(i,j,knots.val,help.env,q, yi=NULL, poly=FALSE)
+
+_A_r_g_u_m_e_n_t_s:
+
+      yi: if the distribution at any discrete point is of interest, you
+          can call for it. Default=NULL doesn't consider any discret
+          point 
+
+     obj: a object of class pendensity
+
+help.env: object is generated with calling distr.func.help(obj)
+
+   len.b: length of B-Spline
+
+       q: order of the B-Spline
+
+knots.val: values of the used knots
+
+    poly: TRUE/FALSE
+
+       i: internal values for calculating the polynoms of each B-Spline
+
+       j: internal values for calculating the polynoms of each B-Spline
+
+_V_a_l_u_e:
+
+distr.func: returns analytical functions of the distributions between
+          each two neighbouring intervals
+
+distr.func.help: creating environment 'help.env', creating help points
+          between each two neighbouring knots and calcutes the
+          polynomial-coefficients of each base part
+
+ cal.int: evaluting the result of distr.func. Thereby it's possible to
+          call for an explicit distribution values F(yi)
+
+poly.part: using in 'distr.func' for creating the polynomial functions
+          of each interval of each two neighbouring knots
+
+_A_u_t_h_o_r(_s):
+
+     Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>
+
+_R_e_f_e_r_e_n_c_e_s:
+
+     Penalized Density Estimation, Kauermann G. and Schellhase C.
+     (2009), to appear.
+

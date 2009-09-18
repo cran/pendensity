@@ -1,0 +1,45 @@
+my.AIC              package:pendensity              R Documentation
+
+_C_a_l_c_u_l_a_t_i_n_g _t_h_e _A_I_C _v_a_l_u_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     Calculating the AIC vaule of the density estimation. Therefore, we
+     add the unpenalized log likelihood of the estimation and the
+     degree of freedom, which are
+
+_U_s_a_g_e:
+
+     my.AIC(penden.env, lambda0, opt.Likelihood = NULL)
+
+_A_r_g_u_m_e_n_t_s:
+
+penden.env: Containing all information, environment of pendensity()
+
+ lambda0: penalty parameter lambda
+
+opt.Likelihood: optimal unpenalized likelihood of the density
+          estimation
+
+_D_e_t_a_i_l_s:
+
+     AIC is calculated as AIC(lambda)= - l(hat{beta}) + df(lambda)
+
+_V_a_l_u_e:
+
+   myAIC: sum of the negative unpenalized log likelihood and mytrace
+
+ mytrace: calculated mytrace as the sum of the diagonal matrix df,
+          which results as the product of the invers of the penalized
+          second order derivative of the log likelihood with the
+          unpenalized second order derivative of the log likelihood
+
+_A_u_t_h_o_r(_s):
+
+     Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>
+
+_R_e_f_e_r_e_n_c_e_s:
+
+     Penalized Density Estimation, Kauermann G. and Schellhase C.
+     (2009), to appear.
+
