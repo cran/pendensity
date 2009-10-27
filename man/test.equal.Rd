@@ -18,6 +18,7 @@ We consider the distribution of the integrated B-Spline density base. This is sa
 \value{
 Returning a list of p-values for testing pairwise for equality.
 }
-\references{Penalized Density Estimation, Kauermann G. and Schellhase C. (2009), to appear.}
+
+\references{Density Estimation with a Penalized Mixture Approach, Kauermann G. and Schellhase C. (2009), to appear.}
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld>}
 \keyword{nonparametric}

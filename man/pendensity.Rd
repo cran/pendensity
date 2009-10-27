@@ -112,7 +112,7 @@ opt.Likelihood: final log likelihood
 marg.Likelihood: final marginal likelihood
 }
 
-\references{Penalized Density Estimation, Kauermann G. and Schellhase C. (2009), to appear.}
+\references{Density Estimation with a Penalized Mixture Approach, Kauermann G. and Schellhase C. (2009), to appear.}
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
 
 \examples{
@@ -127,15 +127,9 @@ test <- pendensity(y~1)
 plot(test)
 
 #expand the support at the boundary
-test2 <- pendensity(y~1,with.border=8)
+test2 <- pendensity(y~1,with.border=1)
 plot(test2)
 
-#expand the support at the boundary and enlarge the number of knots to get the same number of knots in the support
-test3 <- pendensity(y~1,with.border=8,no.base=28)
-plot(test3)
-
-test4 <- pendensity(y~1,with.border=10,no.base=35)
-plot(test4)
 
 #################
 

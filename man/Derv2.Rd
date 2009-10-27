@@ -24,7 +24,7 @@ The penalty is computed as \deqn{\lambda D_m}{%
   \item{Derv2.pen}{second order derivative w.r.t. beta with penalty}
   \item{Derv2.cal}{second order derivative w.r.t. beta without penalty. Needed for calculating of e.g. AIC.}
 }
-\references{Penalized Density Estimation, Kauermann G. and Schellhase C. (2009), to appear.}
+\references{Density Estimation with a Penalized Mixture Approach, Kauermann G. and Schellhase C. (2009), to appear.}
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
 
 

@@ -21,9 +21,7 @@ The needed values are saved in the environment.
 The return is a variance matrix of the dimension (K-1)x(K-1).
 }
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
-\references{
-Penalized Density Estimation, Kauermann G. and Schellhase C. (2009), to appear.
-}
+\references{Density Estimation with a Penalized Mixture Approach, Kauermann G. and Schellhase C. (2009), to appear.}
 
 \keyword{nonparametric}
 

@@ -30,7 +30,7 @@ For later use, we save the unpenalized first derivative as a matrix, in which th
  \eqn{sp(beta)}} }
   \item{f.hat.val}{fitted values of the response for actual parameter beta, called \eqn{\hat{f}}}
 }
-\references{Penalized Density Estimation, Kauermann G. and Schellhase C. (2009), to appear.}
+\references{Density Estimation with a Penalized Mixture Approach, Kauermann G. and Schellhase C. (2009), to appear.}
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
 
 \keyword{math}

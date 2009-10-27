@@ -22,7 +22,7 @@ We terminate the search for the new beta, when the new log likelihood is smaller
   \item{Likelie}{corresponding log likelihood}
   \item{step}{used step size}
 }
-\references{Penalized Density Estimation, Kauermann G. and Schellhase C. (2009), to appear.}
+\references{Density Estimation with a Penalized Mixture Approach, Kauermann G. and Schellhase C. (2009), to appear.}
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
 
 

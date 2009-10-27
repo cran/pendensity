@@ -13,8 +13,8 @@ see the description of the function pendensity.
 \tabular{ll}{
 Package: \tab pendensity\cr
 Type: \tab Package\cr
-Version: \tab 0.1.1\cr
-Date: \tab 2009-09-10\cr
+Version: \tab 0.2\cr
+Date: \tab 2009-10-27\cr
 License: GPL (>= 2)
 LazyLoad: \tab yes\cr
 }
@@ -22,13 +22,60 @@ The packages contributes the function 'pendensity()' for estimating densities us
 }
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
 
-\references{
-Penalized Density Estimation, Kauermann G. and Schellhase C. (2009), to appear.
-}
+
+\references{Density Estimation with a Penalized Mixture ApproachPenalized Density Estimation, Kauermann G. and Schellhase C. (2009), to appear.}
 \keyword{nonparametric}
 \examples{
 y <- rnorm(100)
 test <- pendensity(y~1)
 plot(test)
+
+#################
+
+#second simple example
+#with covariate
+
+x <- rep(c(0,1),200)
+y <- rnorm(400,x*0.2,1)
+test <- pendensity(y~as.factor(x))
+plot(test)
+
+#################
+
+#density-example of the stock exchange Allianz in 2006
+data(Allianz)
+
+form<-'\%d.\%m.\%y'
+
+time.Allianz <- strptime(Allianz[,1],form)
+
+#looking for all dates in 2006
+data.Allianz <- Allianz[which(time.Allianz$year==106),2]
+
+#building differences of first order
+d.Allianz <- diff(data.Allianz)
+
+#estimating the density
+density.Allianz <- pendensity(d.Allianz~1)
+plot(density.Allianz)
+
+#################
+
+#density-example of the stock exchange Allianz in 2006 and 2007
+data(Allianz)
+
+form<-'\%d.\%m.\%y'
+
+time.Allianz <- strptime(Allianz[,1],form)
+
+#looking for all dates in 2006
+data.Allianz <- Allianz[which(time.Allianz$year==106|time.Allianz$year==107),2]
+
+#building differences of first order
+d.Allianz <- diff(data.Allianz)
+
+#estimating the density
+density.Allianz <- pendensity(d.Allianz~as.factor(time.Allianz$year))
+plot(density.Allianz,legend.txt=c("2006","2007"))
 
 }
