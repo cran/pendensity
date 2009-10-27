@@ -19,7 +19,6 @@ string.help(string, star = " ")
 \value{
 Returning the values and the structure of response and covariates.
 }
-\references{Penalized Density Estimation, Kauermann G. and Schellhase C. (2009), to appear.}
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
 
 \keyword{IO}

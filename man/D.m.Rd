@@ -24,7 +24,7 @@ The needed values are saved in the environment.
 \value{
 Returning the penalty matrix.
 }
-\references{Penalized Density Estimation, Kauermann G. and Schellhase C. (2009), to appear.}
+\references{Density Estimation with a Penalized Mixture Approach, Kauermann G. and Schellhase C. (2009), to appear.}
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
 
 \keyword{nonparametric}

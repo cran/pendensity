@@ -1,4 +1,3 @@
-#Main program
 pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=50000,q=3,plot.bsp=FALSE,sort=TRUE,with.border=NULL,m=q) {
   #m <- q-1 #order of penalty
   library(fda)
@@ -115,22 +114,18 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=5000
   kk <- 1
   listen <- list()
   calc <- TRUE
+  change <- TRUE
 
   L <- L.mat(penden.env)
   D.m(penden.env)
 
   liste.opt[1,1] <- get("lambda0",penden.env)
-
+  
   while(calc) {
-    if(kk>=2) sec <- TRUE else sec <- FALSE
-
     i <- 1
     liste <- matrix(0,2,2+(N*K))
     n.liste <- matrix(0,1,2+(N*K))
 
-    #if(kk!=1) {
-    #  assign("beta.val.old",get("beta.val",penden.env),penden.env)
-    #}
     assign("beta.val",rep(0,K*N),penden.env)
     assign("ck.temp",ck(penden.env,get("beta.val",penden.env)),penden.env)
     assign("f.hat.val",f.hat(penden.env),penden.env)
@@ -149,13 +144,7 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=5000
       liste[i,3:((N*K)+2)] <- get("beta.val",penden.env)
     }
     if(!val$Likelie & kk==1) stop ("Conditioning problem. Restart iteration with new start values")
-    if(!val$Likelie & kk!=1) {
-      #assign("beta.val",get("beta.val.old",penden.env),penden.env)
-      #assign("ck.temp",ck(penden.env,get("beta.val",penden.env)),penden.env)
-      #assign("f.hat.val",f.hat(penden.env),penden.env)
-      break
-    }
-
+    if(!val$Likelie & kk!=1) break
 
     while(liste[i,2]-liste[(i-1),2] > accur) {
       help <- new.beta.val(liste[i,2],penden.env)
@@ -168,13 +157,12 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=5000
       }
       else break
     }
-    #fuer gefundenes optimales beta.val und lambda muss 1.Derv.cal,2.Derv.cal,2.Derv.pen und f.hat.val berechnet werden
-
+   
     help.Derv1 <- Derv1(penden.env)
-    assign("Derv1.cal",Derv1.cal <- help.Derv1$Derv1.cal,penden.env)
-    assign("f.hat.val",help.Derv1$f.hat.val,penden.env)
-  
     help.Derv2 <- Derv2(penden.env,get("lambda0",penden.env))
+    
+    assign("Derv1.cal",help.Derv1$Derv1.cal,penden.env)
+    assign("f.hat.val",help.Derv1$f.hat.val,penden.env)
     assign("Derv2.pen",help.Derv2$Derv2.pen,penden.env)
     assign("Derv2.cal",help.Derv2$Derv2.cal,penden.env)
     
@@ -182,38 +170,46 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=5000
     pen.Likelihood <- liste[l,2]
     opt.Likelihood <-pen.log.like(penden.env,get("lambda0",penden.env))
     marg.likeli <- marg.likelihood(penden.env,pen.Likelihood)
-    
-    #print("marginale Likelihood")
-    #print(marg.likeli)
-#####    
+  
     myAIC.help <- my.AIC(penden.env,lambda0=liste.opt[kk,1],opt.Likelihood)
     my.AIC <- myAIC.help$myAIC
     my.trace <- myAIC.help$mytrace
-
-    #if(kk==1) pl.val <- 0 else pl.val <- liste.opt[kk-1,2]
-    #if(pl.val>pen.Likelihood &kk>1) break
-    #if(!max.ml) if(abs(ml.val-marg.likeli)<eps2*ml.val & kk>1) break
     
     liste.opt[kk,2] <- my.AIC
     liste.opt[kk,6:(N*K+5)] <- get("beta.val",penden.env)
     liste.opt[kk,3] <- marg.likeli
     liste.opt[kk,4] <- opt.Likelihood
     liste.opt[kk,5] <- pen.Likelihood
-    
+
+    if(kk>1) if(liste.opt[kk-1,3]/liste.opt[kk,3]<0.975) {
+      print("jetzt")
+      #print(liste.opt)
+      calc <- FALSE
+      assign("beta.val",liste.opt[kk-1,6:(N*K+5)],penden.env)
+      assign("ck.temp",ck(penden.env,get("beta.val",penden.env)),penden.env)
+      assign("f.hat.val",f.hat(penden.env),penden.env)
+      assign("lambda0",liste.opt[kk-1,1],penden.env)
+      #print(get("beta.val",penden.env))
+      liste.opt <- liste.opt[-kk,]
+      listen <- listen[-kk]
+      #print(liste.opt)
+      break
+    }
+
     listen[[kk]] <- liste
     kk <- kk+1
-
     help.lambda <- new.lambda(penden.env,lambda0=liste.opt[kk-1,1])
-    if(abs(help.lambda-liste.opt[kk-1,1])<eps*liste.opt[kk-1,1] | kk>max.iter) break
+        
+    if(abs(help.lambda-liste.opt[kk-1,1])<eps*liste.opt[kk-1,1] | kk>max.iter) calc <- FALSE
     else {
-      liste.opt <- rbind(liste.opt,liste.opt.h)
-      assign("lambda0",liste.opt[kk,1] <- help.lambda,penden.env)
+      if(calc) liste.opt <- rbind(liste.opt,liste.opt.h)
+      if(calc) assign("lambda0",liste.opt[kk,1] <- help.lambda,penden.env)
     }
   }
   
 #print(liste.opt)
   
-  lambda0 <- liste.opt[kk-1,1]
+  lambda0 <- get("lambda0",penden.env)
   
   opt.Likelihood <-pen.log.like(penden.env,lambda0=0)
   marg.likeli <- marg.likelihood(penden.env,pen.Likelihood)
@@ -226,7 +222,7 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=5000
   if(!sort) x.list <- den.form$parcov$x.mat else x.list <- den.form$parcov$x.mat[y.order,]
   
   ck.weights <- ck(penden.env,get("beta.val",penden.env))
-  
+
   obj <- list(call=form,values=list(y=y,x=x,sort=sort,covariate=list(Z=Z,levels=den.form$parcov$levels,how.levels=den.form$parcov$length.how,how.combi=den.form$parcov$combi.how,x.factor=x.factor)),splines=list(K=K,N=N,MeanW=MeanW,Stand.abw=Stand.abw,h=h,m=m,q=q,stand.num=stand.num,base=base,base.den=base.den,base.den2=base.den2,L=L,Dm=get("Dm",penden.env),help.degree=help.degree,knots.val=knots.val),results=list(ck=ck.weights,beta.val=beta.val,lambda0=lambda0,f.hat.val=get("f.hat.val",penden.env),variance.par=varpar,bias.par=biaspar,AIC=list(my.AIC=my.AIC,my.trace=my.trace),Derv=list(Derv2.pen=get("Derv2.pen",penden.env),Derv2.cal=get("Derv2.cal",penden.env),Derv1.cal=get("Derv1.cal",penden.env),iterations=list(list.opt.results=liste.opt,all.lists=listen)),likelihood=list(pen.Likelihood=pen.Likelihood,opt.Likelihood=opt.Likelihood,marg.Likelihood=marg.likeli)))
   class(obj) <- "pendensity"
   return(obj)
