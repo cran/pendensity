@@ -13,8 +13,8 @@ see the description of the function pendensity.
 \tabular{ll}{
 Package: \tab pendensity\cr
 Type: \tab Package\cr
-Version: \tab 0.2\cr
-Date: \tab 2009-10-27\cr
+Version: \tab 0.2.1\cr
+Date: \tab 2010-02-10\cr
 License: GPL (>= 2)
 LazyLoad: \tab yes\cr
 }
@@ -39,6 +39,12 @@ x <- rep(c(0,1),200)
 y <- rnorm(400,x*0.2,1)
 test <- pendensity(y~as.factor(x))
 plot(test)
+
+#################
+
+#calculate the value at some (maybe not observed) value yi=c(0,1) of the estimated density
+
+plot(test,val=c(0,1))
 
 #################
 

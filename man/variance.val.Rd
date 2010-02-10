@@ -5,7 +5,7 @@
  Calculating the variance and standard deviance of each observation. Therefore we use the variance of the parameter set beta, called 'var.par'.
 }
 \usage{
-variance.val(base.den, var.par, weight, K, x, list.len, Z, x.factor)
+variance.val(base.den, var.par, weight, K, x, list.len, Z, x.factor, y.val=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -17,6 +17,8 @@ variance.val(base.den, var.par, weight, K, x, list.len, Z, x.factor)
   \item{list.len}{number of covariate combinations}
   \item{Z}{covariate matrix}
   \item{x.factor}{list of covariate combinations}
+  \item{y.val}{optimal values for calculating the variance in any point
+    yi in the case of a factorial density}
 }
 
 \value{
