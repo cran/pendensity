@@ -1,5 +1,5 @@
 #plotting the estimated density/densities, using the estimated density. Here, it's called 'obj'.
-plot.pendensity <- function(x,plot.val=1,latt=FALSE,kernel=FALSE,confi=TRUE,main=NULL,sub=NULL,xlab=NULL,ylab=NULL,plot.base=FALSE,lwd=NULL,legend.txt=NULL,...) {
+plot.pendensity <- function(x,plot.val=1,val=NULL,latt=FALSE,kernel=FALSE,confi=TRUE,main=NULL,sub=NULL,xlab=NULL,ylab=NULL,plot.base=FALSE,lwd=NULL,legend.txt=NULL,...) {
   library(lattice)
   library(fda)
   obj <- x
@@ -52,7 +52,12 @@ plot.pendensity <- function(x,plot.val=1,latt=FALSE,kernel=FALSE,confi=TRUE,main
 
     max.bw.all <- c()
     
-    if (is.null(x)) {
+    if (is.null(obj$values$x)) {
+      if(!is.null(val)) {
+        y.val <- val
+        cond <- (y.val>=min(knots.val$val) & y.val <=max(knots.val$val))
+        if(any(cond==FALSE)) stop("calculation of density is only possible in the range of the response",call.=FALSE)
+      }
       y <- obj$values$y
       if(!sort) {
         o <- order(y)
@@ -65,10 +70,15 @@ plot.pendensity <- function(x,plot.val=1,latt=FALSE,kernel=FALSE,confi=TRUE,main
       
       if(base=="bspline") {
         if(q>2) K.help <- K-q+2 else K.help <- 0
-        base.val<- my.bspline(h,q,knots.val,y.help,K.help,plot.bsp=FALSE)
-        help.base.den <- base.val$base.den
+        help.base.den <- my.bspline(h,q,knots.val,y.help,K.help,plot.bsp=FALSE)$base.den
+        if(!is.null(val)) {
+          help.base.y.val <- my.bspline(h,q,knots.val,y.val,K.help,plot.bsp=FALSE)$base.den
+          assign("base1.y.val",help.base.y.val,help.env)
+          assign("y.help1.val",y.val,help.env)
+        }
         assign(paste("base1"),help.base.den,env=help.env)
         assign("y.help1",y.help,env=help.env)
+      
       }
       if(base=="gaussian") {
         for(i in 1:m) {
@@ -78,16 +88,29 @@ plot.pendensity <- function(x,plot.val=1,latt=FALSE,kernel=FALSE,confi=TRUE,main
         help.base.den <- apply(nn,1,function(i,MeanW,Stand.abw,y.help) dnorm(y.help[i],MeanW,Stand.abw),MeanW,Stand.abw,y.help)[list,]
         assign(paste("y.help1",sep=""),y.help,env=help.env)
         assign(paste("base1"),help.base.den,env=help.env)
+        if(!is.null(val)) {
+          nn <- matrix(1:length(y.val))
+          help.base.y.val <- apply(nn,1,function(i,MeanW,Stand.abw,y.val) dnorm(y.val[i],MeanW,Stand.abw),MeanW,Stand.abw,y.val)[list,]
+          assign("y.help1.val",y.val,help.env)
+          assign("base1.y.val",help.base.y.val,help.env)
+        }
       }   
       sd.cal <- new.env()
       sd.cal1 <- variance.val(help.base.den,var.par,weight,K,x,Z,x.factor) #confidence intervals
       assign("sd.cal1",sd.cal1,sd.cal)
+      if(!is.null(val)) {
+        sd.cal1.y.val <- variance.val(help.base.y.val,var.par,weight,K,x,Z,x.factor) #confidence intervals
+        assign("sd.cal1.y.val",sd.cal1.y.val,sd.cal)
+      }
       
       assign("weight1",weight,env=help.env)
       assign("y.later1",y,env=help.env)
       assign("len.x.fac1",1,env=help.env)
       assign("b.w1",bw <- get("weight1",env=help.env)%*%get("base1",env=help.env),help.env)
-
+      if(!is.null(val)) {
+        assign("b.w1.y.val",den.val <- get("weight1",env=help.env)%*%get("base1.y.val",env=help.env),help.env)
+      }
+      
       max.bw <- max(bw)
       cut <- 0.0005*max.bw
 
@@ -106,7 +129,7 @@ plot.pendensity <- function(x,plot.val=1,latt=FALSE,kernel=FALSE,confi=TRUE,main
       list.len <- 1
     }
     
-    if (!is.null(x)) {
+    if (!is.null(obj$values$x)) {
       y <- obj$values$y
       help.knots <- c()
       list <- c()
@@ -136,11 +159,21 @@ plot.pendensity <- function(x,plot.val=1,latt=FALSE,kernel=FALSE,confi=TRUE,main
         }
         assign(paste("y.later",j,sep=""),y,env=help.env)
       }
-   
+
+      if(!is.null(val)) {
+        y.val <- val
+        assign("y.val",y.val,help.env)
+        cond <- (y.val>=min(knots.val$val) & y.val <=max(knots.val$val))
+        if(any(cond==FALSE)) stop("calculation of density is only possible in the range of the response",call.=FALSE)
+        den.val <- list()
+        sd.up.y.val <- list()
+        sd.down.y.val <- list()
+      }
+
       for(j in 1:list.len) { #which covariate?
         knot.left <- 1
         knot.right <- K-help.degree
-        
+   
         y.help <- seq(knots.val$val[knot.left],knots.val$val[knot.right],length=200)
         assign(paste("y.help",j,sep=""),y.help,env=help.env)
         if(base=="bspline") {
@@ -148,6 +181,10 @@ plot.pendensity <- function(x,plot.val=1,latt=FALSE,kernel=FALSE,confi=TRUE,main
           base.val<- my.bspline(h,q,knots.val,y.help,K.help,plot.bsp=FALSE)
           help.base.den <- base.val$base.den
           assign(paste("base",j,sep=""),help.base.den,env=help.env)
+          if(!is.null(val)) {
+            help.base.y.val<- my.bspline(h,q,knots.val,y.val,K.help,plot.bsp=FALSE)$base.den
+            assign(paste("base.y.val",j,sep=""),help.base.y.val,env=help.env)
+          }
         }
  
         if(base=="gaussian") {
@@ -155,10 +192,20 @@ plot.pendensity <- function(x,plot.val=1,latt=FALSE,kernel=FALSE,confi=TRUE,main
           nn <- matrix(1:length(y.help))
           help.base.den <- apply(nn,1,function(i,k,MeanW,Stand.abw,y.help) dnorm(y.help[i],MeanW,Stand.abw),MeanW,Stand.abw,y.help)[list,]
           assign(paste("base",j,sep=""),help.base.den,env=help.env)
+          if(!is.null(val)) {
+            nn <- matrix(1:length(y.val))
+            help.base.y.val<- apply(nn,1,function(i,k,MeanW,Stand.abw,y.help) dnorm(y.val,MeanW,Stand.abw),MeanW,Stand.abw,y.val)[list,]
+            assign(paste("base.y.val",j,sep=""),help.base.y.val,env=help.env) 
+          }
+          
         }
         
         bw <- get(paste("weight",j,sep=""),env=help.env)%*%get(paste("base",j,sep=""),env=help.env)
-
+        if(!is.null(val)) {
+          den.val[[j]] <- c(get(paste("weight",j,sep=""),env=help.env)%*%get(paste("base.y.val",j,sep=""),env=help.env))
+          assign(paste("b.w.y.val",j,sep=""),den.val[[j]],env=help.env)
+        }
+                
         max.bw.all <- c(max.bw.all,max(bw))
         assign(paste("b.w",j,sep=""),bw,env=help.env)
         
@@ -167,7 +214,9 @@ plot.pendensity <- function(x,plot.val=1,latt=FALSE,kernel=FALSE,confi=TRUE,main
         if(kernel) max.kern <- max(max(get(paste("kern.den",j,sep=""),env=help.env)$y),max.kern) else max.kern <- 0
         
       }
-      sd.cal <- variance.val(help.env,var.par,weight,K,x,list.len,Z,x.factor)
+
+      if(is.null(val)) y.val <- NULL else y.val <- val
+      sd.cal <- variance.val(help.env,var.par,weight,K,x,list.len,Z,x.factor,y.val=y.val)
 
       max.bw <- max(max.bw.all)
       cut <- 0.0005*max.bw
@@ -193,23 +242,31 @@ plot.pendensity <- function(x,plot.val=1,latt=FALSE,kernel=FALSE,confi=TRUE,main
       max.x <- max(max.x.all)
       min.x <- min(min.x.all)
     }
+
     AIC <- round(my.AIC,2)
     
     if(is.null(lambda0)) lambda0 <- 0
     lam <- round(lambda0,2)
     help.lam <- substitute(lambda ==s,list(s=lam))
-    
-    if(is.null(x)) {
+
+    if(is.null(obj$values$x)) {
       ind <- get("ind1",help.env)
       if(length(ind)!=0) {
         assign("conf.plus1",get("b.w1",help.env)+2*get("sd.cal1",sd.cal)[-ind],help.env)
         assign("conf.minus1",get("b.w1",help.env)-2*get("sd.cal1",sd.cal)[-ind],help.env)
+        if(!is.null(val)) {
+          sd.up.y.val <- c(get("b.w1.y.val",help.env)+2*get("sd.cal1.y.val",sd.cal),help.env)
+          sd.down.y.val <- c(get("b.w1.y.val",help.env)-2*get("sd.cal1.y.val",sd.cal),help.env)
+        }
       }
       else {
         assign("conf.plus1",get("b.w1",help.env)+2*get("sd.cal1",sd.cal),help.env)
         assign("conf.minus1",get("b.w1",help.env)-2*get("sd.cal1",sd.cal),help.env)
+        if(!is.null(val)) {
+          sd.up.y.val <- c(get("b.w1.y.val",help.env)+2*get("sd.cal1.y.val",sd.cal))
+          sd.down.y.val <- c(get("b.w1.y.val",help.env)-2*get("sd.cal1.y.val",sd.cal))
+        }
       }
-        
       list.len <- 1
     }
     else {
@@ -221,11 +278,21 @@ plot.pendensity <- function(x,plot.val=1,latt=FALSE,kernel=FALSE,confi=TRUE,main
           assign(paste("conf.plus",i,sep=""),conf.plus <- get(paste("b.w",i,sep=""),help.env)+2*get(paste("sd.cal",i,sep=""),sd.cal)[-ind])
           c1 <- c(c1,conf.plus)
           assign(paste("conf.minus",i,sep=""),get(paste("b.w",i,sep=""),help.env)-2*get(paste("sd.cal",i,sep=""),sd.cal)[-ind])
+          if(!is.null(val)) {
+            assign(paste("conf.plus.y.val",i,sep=""),sd.up.y.val[[i]] <- c(get(paste("b.w.y.val",i,sep=""),help.env)+2*get(paste("sd.cal.y.val",i,sep=""),sd.cal)))
+            c1 <- c(c1,conf.plus)
+            assign(paste("conf.minus.y.val",i,sep=""),sd.down.y.val[[i]] <- c(get(paste("b.w.y.val",i,sep=""),help.env)-2*get(paste("sd.cal.y.val",i,sep=""),sd.cal)))
+          }
         }
         else {
           assign(paste("conf.plus",i,sep=""),conf.plus <- get(paste("b.w",i,sep=""),help.env)+2*get(paste("sd.cal",i,sep=""),sd.cal))
           c1 <- c(c1,conf.plus)
           assign(paste("conf.minus",i,sep=""),get(paste("b.w",i,sep=""),help.env)-2*get(paste("sd.cal",i,sep=""),sd.cal))
+          if(!is.null(val)) {
+            assign(paste("conf.plus.y.val",i,sep=""),sd.up.y.val[[i]] <- c(get(paste("b.w.y.val",i,sep=""),help.env)+2*get(paste("sd.cal.y.val",i,sep=""),sd.cal)))
+            c1 <- c(c1,conf.plus)
+            assign(paste("conf.minus.y.val",i,sep=""),sd.down.y.val[[i]] <- c(get(paste("b.w.y.val",i,sep=""),help.env)-2*get(paste("sd.cal.y.val",i,sep=""),sd.cal)))
+          }
         } 
       }
     }
@@ -239,18 +306,18 @@ plot.pendensity <- function(x,plot.val=1,latt=FALSE,kernel=FALSE,confi=TRUE,main
     if(!is.null(legend.txt) & length(legend.txt)!=list.len) stop("Input length not equal to length of groupings")
     if(!is.null(legend.txt) & kernel) legend.txt <- c(legend.txt,paste("kernel density estimation of ", legend.txt,sep=""))
 
-    if(is.null(x)) x.range <- range(get("y.help1",help.env))
+    if(is.null(obj$values$x)) x.range <- range(get("y.help1",help.env))
     else  x.range <- c(min.x,max.x)
     x.range.add <- 0.05*diff(x.range)
     x.lim <- c(x.range[1]-x.range.add,x.range[2]+x.range.add)
 
     if(plot.val==1 & latt==FALSE) {
       y.temp <- obj$values$y
-      if(is.null(x)) plot(y.temp, dnorm(y.temp,mean=0,sd=1),xlab=xlab.title,ylab=ylab.title,xlim=x.lim,ylim=c(0,max(max(get("conf.plus1",help.env)),max.kern,max.bsp)),type="n", main=main.title, sub=sub.title,cex.axis=1.2,cex.lab=1.5,cex.main=1.8)
+      if(is.null(obj$values$x)) plot(y.temp, dnorm(y.temp,mean=0,sd=1),xlab=xlab.title,ylab=ylab.title,xlim=x.lim,ylim=c(0,max(max(get("conf.plus1",help.env)),max.kern,max.bsp)),type="n", main=main.title, sub=sub.title,cex.axis=1.2,cex.lab=1.5,cex.main=1.8)
       
-      if(!is.null(x)) plot(y.temp, dnorm(y.temp,mean=0,sd=1),xlab=xlab.title,ylab=ylab.title,xlim=x.lim,ylim=c(0,max(c1,max.kern,max.bsp)),type="n", main=main.title, sub=sub.title,cex.axis=1.2,cex.lab=1.5,cex.main=1.8)
+      if(!is.null(obj$values$x)) plot(y.temp, dnorm(y.temp,mean=0,sd=1),xlab=xlab.title,ylab=ylab.title,xlim=x.lim,ylim=c(0,max(c1,max.kern,max.bsp)),type="n", main=main.title, sub=sub.title,cex.axis=1.2,cex.lab=1.5,cex.main=1.8)
       
-      if(is.null(x)) {
+      if(is.null(obj$values$x)) {
         lines(get(paste("y.help1",sep=""),env=help.env),get(paste("b.w1",sep=""),env=help.env),type="l",lwd=lwd.value)
         if(confi)lines(get("y.help1",help.env),get("conf.plus1",help.env),type="l",lwd=lwd.value-1,lty=3)
         if(confi)lines(get("y.help1",help.env),get("conf.minus1",help.env),type="l",lwd=lwd.value-1,lty=3)
@@ -285,6 +352,7 @@ plot.pendensity <- function(x,plot.val=1,latt=FALSE,kernel=FALSE,confi=TRUE,main
     }
     
     if(plot.val==1 & latt==TRUE) {
+      main.title <- as.expression(main.title)
       y <- c()
       fy <- c()
       fac <- c()
@@ -298,11 +366,11 @@ plot.pendensity <- function(x,plot.val=1,latt=FALSE,kernel=FALSE,confi=TRUE,main
           fy <- c(fy,get(paste("conf.plus",i,sep=""),help.env))
           fy <- c(fy,get(paste("conf.minus",i,sep=""),help.env))
         }
-        if(!is.null(x)) {
+        if(!is.null(obj$values$x)) {
           fac <- c(fac,rep(paste(i,".x=",paste(x.factor[i,],collapse=",",sep=""),sep=""),length(get(paste("b.w",i,sep=""),env=help.env))))
           if(confi) fac <- c(fac,rep(paste(i,".confi+ x=",paste(x.factor[i,],collapse=",",sep=""),sep=""),length(get(paste("conf.plus",i,sep=""),help.env))),rep(paste(i,".confi- x=",paste(x.factor[i,],collapse=",",sep=""),sep=""),length(get(paste("conf.plus",i,sep=""),help.env))))
         }
-        if(is.null(x)) {
+        if(is.null(obj$values$x)) {
           fac <- c(fac,rep("y~1",length(get(paste("b.w",i,sep=""),env=help.env))))
           if(confi) fac <- c(fac,rep("confi+ y~1",length(get(paste("conf.plus",i,sep=""),help.env))),rep("confi- y~1",length(get(paste("conf.plus",i,sep=""),help.env))))
         }
@@ -312,13 +380,45 @@ plot.pendensity <- function(x,plot.val=1,latt=FALSE,kernel=FALSE,confi=TRUE,main
       help55 <- xyplot(fy~y,groups=fac,type="l",auto.key=list(space="right",title="grouping",sort=FALSE),main=main.title,sub=sub.title,data=datafr,xlab=xlab.title,ylab=ylab.title,par.settings=graph.sets,lty=rep(c(2,2,1),list.len))
       print(help55)
     }
+    if(!is.null(val)) {
+      if(!is.null(obj$values$x)) {
+        name <- "baseline"
+        col.names <- colnames(obj$values$covariate$Z)[-1]
+        rownames(x.factor) <- c()
+        x.factor <- x.factor[,-1]
+        if(is.matrix(x.factor)) {
+          c.x.factor <- 1:length(x.factor[1,])
+          r.x.factor <- 1:length(x.factor[,1])
+        }
+        if(is.vector(x.factor)) {
+          c.x.factor <- 1
+          r.x.factor <- length(x.factor)
+          x.factor <- matrix(x.factor,r.x.factor,c.x.factor)
+          r.x.factor <- 1:length(x.factor)
+        }
+        for(i in r.x.factor) {
+          name.help <- c()
+          for(j in c.x.factor) {
+            if(x.factor[i,j]==1) name.help <- c(name.help,col.names[j])
+          }
+          if(length(name.help)>1) name.help <- paste(name.help,collapse="&")
+          name <- c(name,name.help)
+        }
+        name <- noquote(name)
+        names(den.val) <- name
+        names(sd.up.y.val) <- name
+        names(sd.down.y.val) <- name
+      }
+      return(list(y=y.val,fy=den.val,sd.down.y.val=sd.down.y.val,sd.up.y.val=sd.up.y.val))
+    }
   }
   
 if(plot.val==2) {
+  library("lattice")
   sort <- obj$values$sort
   y.list <- list()
   sum.list <- list()
-  if(is.null(obj$x)) {
+  if(is.null(obj$values$x)) {
     knots <- obj$splines$knots
     beta <- obj$results$beta.val
     x.factor <- obj$values$covariate$x.factor
@@ -343,7 +443,12 @@ if(plot.val==2) {
     y <- sort(y)
     y.list[[1]] <- y
     sum.list[[1]] <- sum
-    plot(y,sum,xlab="y",ylab="F(y)",main="Distribution of f(y)")
+    if(!latt) plot(y,sum,xlab="y",ylab="F(y)",main="Distribution of f(y)")
+    else {
+      datafr <- data.frame(y,sum)
+      obj <- xyplot(sum~y,data=datafr,ylab="F(y)",xlab="y",main="Distribution of f(y)")
+      print(obj)
+    }
     return(list(y=y.list,sum=sum.list))
   }
   if(!is.null(obj$values$x)) {
@@ -357,16 +462,17 @@ if(plot.val==2) {
     N <- obj$splines$N
     y <- obj$values$y
     x <- obj$values$x
+    K <- obj$splines$K
     len.x.fac <- length(x.factor[,1])
     all.x <- 0
     all.x2 <- 1
-    Z <- obj$values$Z
+    Z <- obj$values$covariate$Z
     weight <- obj$results$ck
 
     for(i in 1:len.x.fac) {
-        name <- paste("weight",i,sep="")
-        assign(name,weight[i,],env=help.env)
-      }
+      name <- paste("weight",i,sep="")
+      assign(name,weight[i,],env=help.env)
+    }
     y.help <- c()
     y.call <- c()
     if(!sort) {
@@ -390,7 +496,13 @@ if(plot.val==2) {
       assign(paste("y.later",j,sep=""),y,env=help.env)
       assign(paste("y.list",j,sep=""),set,env=help.env)
     }
-    par(mfrow=c(2,ceiling(len.x.fac/2)))
+
+    if(!latt) par(mfrow=c(2,ceiling(len.x.fac/2)))
+    else{
+      y.lattice <- c()
+      sum.lattice <- c()
+      factor <- c()
+    }
     for(j in 1:len.x.fac) { #which covariate?
       y.r <- range(get(paste("y.later",j,sep=""),env=help.env))
       y.list <- get(paste("y.list",j,sep=""),env=help.env)
@@ -399,15 +511,28 @@ if(plot.val==2) {
         base.den2 <- rbind(base.den2,row.help)
         sum <- c(0)
         weight <- get(paste("weight",j,sep=""),help.env)
-	  for(k in 1:K) {
-        	sum <- weight[k]*colSums(base.den2[(k:(K+1)),y.list]) +sum
+        for(k in 1:K) {
+          sum <- weight[k]*colSums(base.den2[(k:(K+1)),y.list]) +sum
         }
         assign(paste("distr",j,sep=""),sum,env=help.env)
-        y.call[[j]] <- get(paste("y.later",j,sep=""),env=help.env)
-        sum.list[[j]] <- sum
-        plot(get(paste("y.later",j,sep=""),env=help.env),sum,xlab="y",ylab=paste("F(y|x",j,")",sep=""),main=paste("Distribution of f(y|x",j,")",sep=""))
-      }
-      }
+        if(latt) {
+          y.lattice <- c(y.lattice,get(paste("y.later",j,sep=""),env=help.env))
+          sum.lattice <- c(sum.lattice,sum)
+          factor <- c(factor,rep(paste("Distribution-No",j,sep=""),length(sum)))
+          y.call[[j]] <- get(paste("y.later",j,sep=""),env=help.env)
+          sum.list[[j]] <- sum
+        }
+        else {
+          y.call[[j]] <- get(paste("y.later",j,sep=""),env=help.env)
+          sum.list[[j]] <- sum
+          plot(get(paste("y.later",j,sep=""),env=help.env),sum,xlab="y",ylab=paste("F(y|x",j,")",sep=""),main=paste("Distribution of f(y|x",j,")",sep=""))
+        }
+      }  
+    }
+    if(latt) {
+      datafr <- data.frame(y.lattice,sum.lattice,factor)
+      print(xyplot(sum.lattice~y.lattice|factor,data=datafr,xlab="y",ylab="F(y)",autokey=TRUE))
+    }
   return(list(y=y.call,sum=sum.list))
   }
 }
@@ -421,15 +546,20 @@ if(plot.val==2) {
     all.x2 <- get("allx",env=func)
     par(mfrow=c(ceiling(sqrt(all.x2)),1))
     y <- obj$values$y
-    Z <- obj$values$Z
+    Z <- obj$values$covariate$Z
     x <- obj$values$x
     eps <- 1e-10
     y.help <- c()
+    y.lattice <- c()
+    sum.lattice <- c()
+    factor <- c()
+    eps <- 1e-10
     for(i in 1:all.x2) {
+      print(i)
       w <- c()
       tt <- c()
       if(!is.null(x)) com.h <- x.factor[i,]
-      
+
       if(!is.null(x)) {
         for(j in 1:length(Z[,1])) {
           if(identical(as.vector(Z[j,]),as.vector(com.h))==TRUE) y.help <- c(y.help,y[j])
@@ -445,6 +575,7 @@ if(plot.val==2) {
         if(knots.val$val[k]-eps <= min.y & min.y <= knots.val$val[k+1]+eps) val.min <- k
         if(knots.val$val[k]-eps <= max.y & max.y <= knots.val$val[k+1]+eps) val.max <- k
       }
+      
       for(j in val.min:val.max) {
         funcy <- get(paste("distr.func",i,".",j,sep=""),env=func)
         eval(parse(text=funcy))
@@ -455,9 +586,17 @@ if(plot.val==2) {
         w <- c(w,xi)
         tt <- c(tt,ti)
       }
+      if(latt) {
+        y.lattice <- c(y.lattice,w)
+        sum.lattice <- c(sum.lattice,tt)
+        factor <- c(factor,rep(paste("Distribution-No",i,sep=""),length(tt)))
+      }
       assign(paste("x",i,sep=""),w,env=func)
       assign(paste("F(x)",i,sep=""),tt,env=func)
-      plot(w,tt,xlab="y",ylab="F(y)",main=paste("Distribution function of f(y|x",i,")",sep=""))
+      if(!latt) plot(w,tt,xlab="y",ylab="F(y)",main=paste("Distribution function of f(y|x",i,")",sep=""))
     }
+    datafr <- data.frame(y.lattice,sum.lattice,factor)
+    print(xyplot(sum.lattice~y.lattice|factor,data=datafr,xlab="y",ylab="F(y)",autokey=TRUE))
+    
   }
 }

@@ -89,7 +89,7 @@ results contains:
 ck: final calculated weights ck
 beta.val: final calculated parameter beta
 lambda0: final calculated lambda0
-f.hat.val: final fitted density values of the response y
+fitted: fitted values of the density f(y)
 variance.par: final variances of the parameter beta
 bias.par: final bias of the parameter beta
 
