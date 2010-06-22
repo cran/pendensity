@@ -1,8 +1,9 @@
-pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=50000,q=3,plot.bsp=FALSE,sort=TRUE,with.border=NULL,m=q) {
+pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=50000,q=3,plot.bsp=FALSE,sort=TRUE,with.border=NULL,m=q,data=parent.frame()) {
   #m <- q-1 #order of penalty
   library(fda)
   library(lattice)
   penden.env <- new.env()
+  assign("frame",data,penden.env)
   assign("q",q,penden.env)
   assign("m",m,penden.env)
   assign("base",base,penden.env)
@@ -10,7 +11,7 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=5000
   #accur<- 0.01
   accur <- 0.001
   knots.spline <- NULL
-  den.form <-  pendenForm(form)
+  den.form <-  pendenForm(penden.env)
   stand.num <- NULL
   eps <- 0.01
   eps2 <- 1e-03
@@ -182,7 +183,7 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=5000
     liste.opt[kk,5] <- pen.Likelihood
 
     if(kk>1) if(liste.opt[kk-1,3]/liste.opt[kk,3]<0.975) {
-      print("jetzt")
+      #print("jetzt")
       #print(liste.opt)
       calc <- FALSE
       assign("beta.val",liste.opt[kk-1,6:(N*K+5)],penden.env)

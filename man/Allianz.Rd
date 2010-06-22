@@ -28,7 +28,7 @@ data.Allianz <- Allianz[which(time.Allianz$year==106),2]
 d.Allianz <- diff(data.Allianz)
 
 #estimating the density
-density.Allianz <- pendensity(d.Allianz~1)
+density.Allianz <- pendensity(d.Allianz~1,)
 plot(density.Allianz)
 }
 \keyword{datasets}

@@ -6,12 +6,12 @@
 Function 'pendenForm' interprets the input 'form' of the function pendensity(),transfers the response and covariates data back to the main program and categorize the values to groupings.
 }
 \usage{
-pendenForm(form)
+pendenForm(penden.env)
 string.help(string, star = " ")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{form}{formula from the input of pendensity()}
+  \item{penden.env}{environment used in pendensity()}
   \item{string}{string of the formula}
   \item{star}{separating letter}
 }

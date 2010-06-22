@@ -13,8 +13,8 @@ see the description of the function pendensity.
 \tabular{ll}{
 Package: \tab pendensity\cr
 Type: \tab Package\cr
-Version: \tab 0.2.1\cr
-Date: \tab 2010-02-10\cr
+Version: \tab 0.2.3\cr
+Date: \tab 2010-06-22\cr
 License: GPL (>= 2)
 LazyLoad: \tab yes\cr
 }
@@ -61,27 +61,8 @@ data.Allianz <- Allianz[which(time.Allianz$year==106),2]
 #building differences of first order
 d.Allianz <- diff(data.Allianz)
 
-#estimating the density
-density.Allianz <- pendensity(d.Allianz~1)
+#estimating the density, choosing a special start value for lambda
+density.Allianz <- pendensity(d.Allianz~1,lambda0=90000)
 plot(density.Allianz)
-
-#################
-
-#density-example of the stock exchange Allianz in 2006 and 2007
-data(Allianz)
-
-form<-'\%d.\%m.\%y'
-
-time.Allianz <- strptime(Allianz[,1],form)
-
-#looking for all dates in 2006
-data.Allianz <- Allianz[which(time.Allianz$year==106|time.Allianz$year==107),2]
-
-#building differences of first order
-d.Allianz <- diff(data.Allianz)
-
-#estimating the density
-density.Allianz <- pendensity(d.Allianz~as.factor(time.Allianz$year))
-plot(density.Allianz,legend.txt=c("2006","2007"))
 
 }
