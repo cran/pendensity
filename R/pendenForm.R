@@ -1,11 +1,9 @@
-
-pendenForm <- function(form) {
-  char.vec <- as.character(form)
+pendenForm <- function(penden.env) {
+  pf <- get("frame",penden.env)
+  char.vec <- as.character(get("form",penden.env))
   response.name <- char.vec[2]
-  response.val <- eval(parse(text=response.name))
+  response.val <- eval(parse(text=response.name),envir=pf)
   val <- paste(string.help(char.vec[3]),collapse= "")
-  #val <- string.help(val, "\n")
-  #val <- string.help(val, "\t")
   val <- string.help(val, "+")
   no.cov <- list()
   parcov <- list()
@@ -34,11 +32,10 @@ pendenForm <- function(form) {
     col.nam <- c()
     for (i in 1:length(val)) {
       term <- val[i]
-      #ev. type abfrage?
       parcov$name <- c(parcov$name, term)
-      if (is.factor(eval(parse(text = term)))) {
-        parcov$x <- cbind(parcov$x, eval(parse(text = term)))
-        parcov$contrasts[[i]] <- contrasts(eval(parse(text = term)))
+      if (is.factor(eval(parse(text = term),env=penden.env))) {
+        parcov$x <- cbind(parcov$x, eval(parse(text = term),env=penden.env))
+        parcov$contrasts[[i]] <- contrasts(eval(parse(text = term),env=penden.env))
         parcov$levels[[i]] <- levels(eval(parse(text = term)))
         parcov$length.how <- parcov$length.how+1
         parcov$len.cov[i] <- length(parcov$levels[[i]])
@@ -47,7 +44,7 @@ pendenForm <- function(form) {
       else {
         stop("Covariates have to be factors!",call.=FALSE)
       }
-      col.nam <- c(col.nam,paste(parcov$name[i],parcov$levels[[i]],sep=""))
+      col.nam <- c(col.nam,paste(parcov$name[i],"=",parcov$levels[[i]],sep=""))
     }
     help <- c()
     help2 <- c()
@@ -87,6 +84,6 @@ pendenForm <- function(form) {
     }
     parcov$cons <- cons
   }
-  info <- list(formula = form, y = response.val, no.cov=no.cov, parcov=parcov)
+  info <- list(formula = get("form",penden.env), y = response.val, no.cov=no.cov, parcov=parcov)
   return(info)
 }

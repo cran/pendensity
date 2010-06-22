@@ -19,9 +19,9 @@ new.lambda <- function(penden.env,lambda0) {
     Derv2.tmp <- Derv2(penden.env,lambda[hh])
     df <- sum(diag(my.positive.definite.solve(Derv2.tmp$Derv2.pen)%*%Derv2.tmp$Derv2.cal))
 
-    if(df-(p*(m-1)) < epsdf)
-      {print("df kleiner m-1+epsdf")
-      break}
+    if(df-(p*(m-1)) < epsdf) break
+      #{print("df kleiner m-1+epsdf")
+      
     
     df<- df-(p*(m-1))
 

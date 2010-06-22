@@ -7,7 +7,7 @@ Main program for estimation penalized densities. The estimation can be done for 
 }
 \usage{
 pendensity(form, base = "bspline", no.base = NULL, max.iter = 20,
- lambda0 = 50000, q = 3, plot.bsp = FALSE, sort = TRUE, with.border = NULL, m = q)
+ lambda0 = 50000, q = 3, plot.bsp = FALSE, sort = TRUE, with.border = NULL, m = q, data=parent.frame())
 }
 
 \arguments{
@@ -24,6 +24,7 @@ pendensity(form, base = "bspline", no.base = NULL, max.iter = 20,
   \item{sort}{TRUE or FALSE, if TRUE the response and the covariates should be sorted}
   \item{with.border}{determining the number of additional knots on the left and the right of the support of the response. The number of knots 'no.base' is not influenced by this parameter. The amount of knots 'no.base' are placed on the support of the response. The amount of knots determined in 'with.border' is placed outside the support and reduce the amount of knots on the support about its value.}
   \item{m}{m-th order difference for penalization. Default is m=3.}
+  \item{data}{reference to the data. Default reference is the parent.frame().}
 }
 \details{
 pendensity() begins with setting the parameters for the estimation. Checking the formula and transferring the data into the program, setting the knots and creating the base, depending on the chosen parameter 'base'. Moreover the penalty matrix is constructed. At the beginning of the first iteration the beta parameter are set equal to zero. With this setup, the first log likelihood is calculated and is used for the first iteration for a new beta parameter.\cr
@@ -158,27 +159,8 @@ data.Allianz <- Allianz[which(time.Allianz$year==106),2]
 d.Allianz <- diff(data.Allianz)
 
 #estimating the density
-density.Allianz <- pendensity(d.Allianz~1)
+density.Allianz <- pendensity(d.Allianz~1, lambda0=90000)
 plot(density.Allianz)
-
-#################
-
-#density-example of the stock exchange Allianz in 2006 and 2007
-data(Allianz)
-
-form<-'\%d.\%m.\%y'
-
-time.Allianz <- strptime(Allianz[,1],form)
-
-#looking for all dates in 2006
-data.Allianz <- Allianz[which(time.Allianz$year==106|time.Allianz$year==107),2]
-
-#building differences of first order
-d.Allianz <- diff(data.Allianz)
-
-#estimating the density
-density.Allianz <- pendensity(d.Allianz~as.factor(time.Allianz$year))
-plot(density.Allianz,legend.txt=c("2006","2007"))
 }
 
 \keyword{nonparametric}

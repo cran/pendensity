@@ -1,20 +1,21 @@
 test.equal <- function(obj) {
   if(!inherits(obj, "pendensity")) break("Not a object of class pendensity")
-  if(is.null(obj$x)) stop("The input is an univariate pendensity-object. Nothing to compare")
+  if(is.null(obj$values$x)) stop("The input is an univariate pendensity-object. Nothing to test")
   help.env <- distr.func.help(obj)
-  K <- obj$K
-  q <- obj$q
-  p <- obj$p
-  Z <- obj$Z
-  l.Z <- length(obj$x.factor[,1])
+  K <- obj$splines$K
+  q <- obj$splines$q
+  Z <- obj$splines$Z
+  x.factor <- obj$values$covariate$x.factor
+  l.Z <- length(x.factor[,1])
+  ck <- obj$results$ck
   M <- floor(K/2)+1
   for(i in 1:l.Z) {
-    assign(paste("ZZ.help",i,sep=""),kronecker(diag(1,K-1),obj$x.factor[i,]),help.env)
-    assign(paste("c",i,sep=""),c.temp <- c(obj$ck[i,]),help.env)
+    assign(paste("ZZ.help",i,sep=""),kronecker(diag(1,K-1),x.factor[i,]),help.env)
+    assign(paste("c",i,sep=""),c.temp <- c(ck[i,]),help.env)
     assign(paste("C",i,sep=""),(diag(c.temp)-tcrossprod(c.temp))[,-M],help.env)
   }
   
-  knots.val <- obj$knots.val
+  knots.val <- obj$splines$knots.val
   mat1 <- matrix(0,K+q,K)
   for(i in 1:K) {
     vec <- matrix(0,K+q,1)
@@ -26,7 +27,7 @@ test.equal <- function(obj) {
   }
   mat1 <- mat1[1:K,]
 
-  var.par <- obj$variance.par
+  var.par <- obj$results$variance.par
 
   choose.temp <- choose(l.Z,2)
 
