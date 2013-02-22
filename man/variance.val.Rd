@@ -25,7 +25,6 @@ variance.val(base.den, var.par, weight, K, x, list.len, Z, x.factor, y.val=NULL)
 Returning a vector with the standard deviance of each observation.
 }
 
-\references{Density Estimation with a Penalized Mixture Approach, Kauermann G. and Schellhase C. (2009), to appear.}
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld>}
-
+\references{Density Estimation with a Penalized Mixture Approach, Schellhase C. and Kauermann G. (2012), Computational Statistics 27 (4), p. 757-777.}
 \keyword{nonparametric}

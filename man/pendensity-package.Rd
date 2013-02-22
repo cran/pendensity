@@ -13,8 +13,8 @@ see the description of the function pendensity.
 \tabular{ll}{
 Package: \tab pendensity\cr
 Type: \tab Package\cr
-Version: \tab 0.2.3\cr
-Date: \tab 2010-06-22\cr
+Version: \tab 0.2.5\cr
+Date: \tab 2013-02-22\cr
 License: GPL (>= 2)
 LazyLoad: \tab yes\cr
 }
@@ -22,8 +22,7 @@ The packages contributes the function 'pendensity()' for estimating densities us
 }
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
 
-
-\references{Density Estimation with a Penalized Mixture ApproachPenalized Density Estimation, Kauermann G. and Schellhase C. (2009), to appear.}
+\references{Density Estimation with a Penalized Mixture Approach, Schellhase C. and Kauermann G. (2012), Computational Statistics 27 (4), p. 757-777.}
 \keyword{nonparametric}
 \examples{
 y <- rnorm(100)

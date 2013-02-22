@@ -36,8 +36,7 @@ Plotting estimated penalized densities, need object of class 'pendensity'.
 \details{
 Each grouping of factors is plotted. Therefore, equidistant help values are constructed in the support of the response for each grouping of factors. Weighting these help values with knots weights ck results in the density estimation for each grouping of factors. If asked for, pointwise confidence intervals are computed and plotted.
 }
-
-\references{Density Estimation with a Penalized Mixture Approach, Kauermann G. and Schellhase C. (2009), to appear.}
+\references{Density Estimation with a Penalized Mixture Approach, Schellhase C. and Kauermann G. (2012), Computational Statistics 27 (4), p. 757-777.}
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
 
 \value{

@@ -35,8 +35,7 @@ The needed values are saved in the environment.
 \value{
 Returning the actual weights ck, depending on the actual parameter beta in a matrix with rows.
 }
-
-\references{Density Estimation with a Penalized Mixture Approach, Kauermann G. and Schellhase C. (2009), to appear.}
+\references{Density Estimation with a Penalized Mixture Approach, Schellhase C. and Kauermann G. (2012), Computational Statistics 27 (4), p. 757-777.}
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
 
 \keyword{nonparametric}

@@ -33,10 +33,10 @@ pendenForm <- function(penden.env) {
     for (i in 1:length(val)) {
       term <- val[i]
       parcov$name <- c(parcov$name, term)
-      if (is.factor(eval(parse(text = term),env=penden.env))) {
-        parcov$x <- cbind(parcov$x, eval(parse(text = term),env=penden.env))
-        parcov$contrasts[[i]] <- contrasts(eval(parse(text = term),env=penden.env))
-        parcov$levels[[i]] <- levels(eval(parse(text = term)))
+      if (is.factor(eval(parse(text = term),envir=pf))) {#penden.env
+        parcov$x <- cbind(parcov$x, eval(parse(text = term),envir=pf))#penden.env
+        parcov$contrasts[[i]] <- contrasts(eval(parse(text = term),envir=pf))#penden.env
+        parcov$levels[[i]] <- levels(eval(parse(text = term),envir=pf))#penden.env
         parcov$length.how <- parcov$length.how+1
         parcov$len.cov[i] <- length(parcov$levels[[i]])
         parcov$combi.how <- parcov$combi.how * parcov$len.cov[i]

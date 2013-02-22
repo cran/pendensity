@@ -11,7 +11,6 @@ new.lambda <- function(penden.env,lambda0) {
   calc <- TRUE
   lambda <- lambda0
   u <- t(beta.val.help)%*%get("Dm",penden.env)%*%beta.val.help
-
   hh <-1
   while(calc) {
     if(hh==11) break
@@ -21,7 +20,7 @@ new.lambda <- function(penden.env,lambda0) {
 
     if(df-(p*(m-1)) < epsdf) break
       #{print("df kleiner m-1+epsdf")
-      
+     
     
     df<- df-(p*(m-1))
 
