@@ -8,6 +8,7 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=5000
   assign("m",m,penden.env)
   assign("base",base,penden.env)
   assign("lambda0",lambda0,penden.env)
+  assign("form",form,penden.env)
   #accur<- 0.01
   accur <- 0.001
   knots.spline <- NULL

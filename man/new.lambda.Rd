@@ -22,6 +22,7 @@ The iteration formulae is
 \value{
 Returning the new lambda.
 }
-\references{Density Estimation with a Penalized Mixture Approach, Kauermann G. and Schellhase C. (2009), to appear.}
+
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
 \keyword{nonparametric}
+\references{Density Estimation with a Penalized Mixture Approach, Schellhase C. and Kauermann G. (2012), Computational Statistics 27 (4), p. 757-777.}

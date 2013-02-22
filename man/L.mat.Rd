@@ -16,7 +16,8 @@ Returns the difference matrix of order 'm' for given number of knots 'K'.
 
 The needed values are saved in the environment.
 }
-\references{Density Estimation with a Penalized Mixture Approach, Kauermann G. and Schellhase C. (2009), to appear.}
+\references{Density Estimation with a Penalized Mixture Approach, Schellhase C. and Kauermann G. (2012), Computational Statistics 27 (4), p. 757-777.}
+
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
 \note{
 Right now, the difference matrix is implemented for m=1,2,3,4.

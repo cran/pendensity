@@ -15,13 +15,13 @@ variance.val <- function(base.den,var.par,weight,K,x,list.len,Z,x.factor,y.val=N
       if(!is.null(y.val))
         {
           name3 <- paste("base.y.val",i,sep="")
-          base <- get(name3,env=base.den)
+          base <- get(name3,envir=base.den)
           #C.bold <- (diag(weight[i,])-tcrossprod(weight[i,]))[,-M]
           varr <- t(base)%*%C.bold%*%t(ZZ1)%*%var.par%*%ZZ1%*%t(C.bold)%*%base
           sd <- sqrt(diag(varr))
           assign(paste("sd.cal.y.val",i,sep=""),sd,help.env)
         }
-      base <- get(name2,env=base.den)
+      base <- get(name2,envir=base.den)
       #C.bold <- (diag(weight[i,])-tcrossprod(weight[i,]))[,-M]
       varr <- t(base)%*%C.bold%*%t(ZZ1)%*%var.par%*%ZZ1%*%t(C.bold)%*%base
       sd <- sqrt(diag(varr))

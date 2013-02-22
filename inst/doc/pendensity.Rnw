@@ -2,6 +2,7 @@
 
 \usepackage{Sweave}
 \usepackage{graphicx}
+\usepackage[utf8]{inputenc}
 
 \addtolength{\topmargin}{-2cm}
 \setlength{\textheight}{24cm}
@@ -25,7 +26,8 @@
 \small Centre for Statistics, Bielefeld University\\[-0.8ex]
 \small Department for Business Administration and Economics\\[-0.8ex]
 \\[-0.8ex]
-Version 0.2.2\\[-0.8ex]}
+Version 0.2.5\\[-0.8ex]
+\textit{Density Estimation with a Penalized Mixture Approach}, Schellhase C. and Kauermann G. (2012), Computational Statistics 27 (4), p. 757-777.}
 \maketitle
 
 \begin{abstract}

@@ -112,8 +112,7 @@ pen.Likelihood: final penalized log likelihood
 opt.Likelihood: final log likelihood
 marg.Likelihood: final marginal likelihood
 }
-
-\references{Density Estimation with a Penalized Mixture Approach, Kauermann G. and Schellhase C. (2009), to appear.}
+\references{Density Estimation with a Penalized Mixture Approach, Schellhase C. and Kauermann G. (2012), Computational Statistics 27 (4), p. 757-777.}
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
 
 \examples{

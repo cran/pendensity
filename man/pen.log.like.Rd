@@ -27,7 +27,7 @@ The needed values are saved in the environment.
 \value{
 Returns the log likelihood depending on the penalty parameter lambda.
 }
-\references{Density Estimation with a Penalized Mixture Approach, Kauermann G. and Schellhase C. (2009), to appear.}
+\references{Density Estimation with a Penalized Mixture Approach, Schellhase C. and Kauermann G. (2012), Computational Statistics 27 (4), p. 757-777.}
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
 
 \keyword{nonparametric}

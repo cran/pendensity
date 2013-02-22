@@ -34,8 +34,8 @@ poly.part(i,j,knots.val,help.env,q, yi=NULL, poly=FALSE)
 \item{cal.int}{evaluating the result of distr.func. Thereby it's possible to call for an explicit distribution values F(yi)}
 \item{poly.part}{using in 'distr.func' for creating the polynomial functions of each interval of each two neighbouring knots}
 }
-\references{Density Estimation with a Penalized Mixture Approach, Kauermann G. and Schellhase C. (2009), to appear.}
-\author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
 
+\author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
+\references{Density Estimation with a Penalized Mixture Approach, Schellhase C. and Kauermann G. (2012), Computational Statistics 27 (4), p. 757-777.}
 
 \keyword{math}

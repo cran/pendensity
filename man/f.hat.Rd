@@ -17,6 +17,7 @@ Calculating the actual fitted values of the response, depending on the actual pa
 \value{
 The returned value is a vector of the fitted value for each observation of y.
 }
-\references{Density Estimation with a Penalized Mixture Approach, Kauermann G. and Schellhase C. (2009), to appear.}
+
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
 \keyword{nonparametric}
+\references{Density Estimation with a Penalized Mixture Approach, Schellhase C. and Kauermann G. (2012), Computational Statistics 27 (4), p. 757-777.}

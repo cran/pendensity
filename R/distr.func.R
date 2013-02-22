@@ -12,22 +12,22 @@ distr.func <- function(yi=NULL,obj,help.env=distr.func.help(obj)) {
   func.env <- new.env()
   if(is.null(obj$values$x))  len.x.fac <- 1  else len.x.fac <- length(x.factor[,1])
 
-  assign("allx",len.x.fac,env=func.env)
+  assign("allx",len.x.fac,envir=func.env)
 
-  if(is.null(x)) assign("weight1",weight,env=func.env)
+  if(is.null(x)) assign("weight1",weight,envir=func.env)
   else {  
     for(i in 1:len.x.fac) {
       name <- paste("weight",i,sep="")
-      assign(name,weight[i,],env=func.env)
+      assign(name,weight[i,],envir=func.env)
     }
   }
-  assign("combi",obj$combi,env=func.env)
+  assign("combi",obj$combi,envir=func.env)
   
 
   sum <- c(0,0)
 
   for(k in 1:len.x.fac) {
-    weight <-  get(paste("weight",k,sep=""),env=func.env)
+    weight <-  get(paste("weight",k,sep=""),envir=func.env)
      if(!is.null(yi)) {
       for(j in 1:(length(knots.val$help)-1)) {
         if(knots.val$help[j] <= yi & yi < knots.val$help[j+1]) val <- j
@@ -54,7 +54,7 @@ distr.func <- function(yi=NULL,obj,help.env=distr.func.help(obj)) {
 
       val3 <- seq(q,length(knots.val$help)-q)
       for(i in 1:len.x.fac) {
-        weight <- get(paste("weight",i,sep=""),env=func.env)
+        weight <- get(paste("weight",i,sep=""),envir=func.env)
         for(j in 1:length(val3)) {
           sum <- 0
           for(w in q:val3[j]) {
@@ -73,7 +73,7 @@ distr.func <- function(yi=NULL,obj,help.env=distr.func.help(obj)) {
               }
               term[q+1] <- sum
               term <- paste(term,collapse="+")
-              assign(paste("distr.func",i,".",j,sep=""),paste("obj <-function(x){",term,"}"),env=func.env)
+              assign(paste("distr.func",i,".",j,sep=""),paste("obj <-function(x){",term,"}"),envir=func.env)
             }
           }
         }
