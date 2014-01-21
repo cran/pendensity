@@ -6,8 +6,7 @@
 Main program for estimation penalized densities. The estimation can be done for response with or without any covariates. The covariates have to be factors. The response is called 'y', the covariates 'x'. We estimate densities using penalized splines. This done by using a number of knots and a penalty parameter, which are sufficient large. We penalize the m-order differences of the beta-coefficients to estimate the weights 'ck' of the used base functions.
 }
 \usage{
-pendensity(form, base = "bspline", no.base = NULL, max.iter = 20,
- lambda0 = 50000, q = 3, plot.bsp = FALSE, sort = TRUE, with.border = NULL, m = q, data=parent.frame())
+pendensity(form, base, no.base, max.iter, lambda0, q, sort, with.border, m, data)
 }
 
 \arguments{
@@ -20,11 +19,10 @@ pendensity(form, base = "bspline", no.base = NULL, max.iter = 20,
   \item{max.iter}{maximum number of iteration, the default is max.iter=20.}
   \item{lambda0}{start penalty parameter, the default is lambda0=50000}
   \item{q}{order of B-Spline base, the default is 'q=3'}
-  \item{plot.bsp}{TRUE or FALSE, if TRUE the used B-Spline base should be plotted}
-  \item{sort}{TRUE or FALSE, if TRUE the response and the covariates should be sorted}
-  \item{with.border}{determining the number of additional knots on the left and the right of the support of the response. The number of knots 'no.base' is not influenced by this parameter. The amount of knots 'no.base' are placed on the support of the response. The amount of knots determined in 'with.border' is placed outside the support and reduce the amount of knots on the support about its value.}
-  \item{m}{m-th order difference for penalization. Default is m=3.}
-  \item{data}{reference to the data. Default reference is the parent.frame().}
+  \item{sort}{TRUE or FALSE, if TRUE the response and the covariates should be sorted. Default is TRUE.}
+  \item{with.border}{determining the number of additional knots on the left and the right of the support of the response. The number of knots 'no.base' is not influenced by this parameter. The amount of knots 'no.base' are placed on the support of the response. The amount of knots determined in 'with.border' is placed outside the support and reduce the amount of knots on the support about its value. Default is NULL.}
+  \item{m}{m-th order difference for penalization. Default is m=q.}
+  \item{data}{reference to the data. Default reference is the data=parent.frame().}
 }
 \details{
 pendensity() begins with setting the parameters for the estimation. Checking the formula and transferring the data into the program, setting the knots and creating the base, depending on the chosen parameter 'base'. Moreover the penalty matrix is constructed. At the beginning of the first iteration the beta parameter are set equal to zero. With this setup, the first log likelihood is calculated and is used for the first iteration for a new beta parameter.\cr
@@ -114,52 +112,5 @@ marg.Likelihood: final marginal likelihood
 }
 \references{Density Estimation with a Penalized Mixture Approach, Schellhase C. and Kauermann G. (2012), Computational Statistics 27 (4), p. 757-777.}
 \author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
-
-\examples{
-#first simple example
-
-set.seed(27)
-
-y <- rnorm(100)
-test <- pendensity(y~1)
-
-#plotting the estimated density
-plot(test)
-
-#expand the support at the boundary
-test2 <- pendensity(y~1,with.border=1)
-plot(test2)
-
-
-#################
-
-#second simple example
-#with covariate
-
-x <- rep(c(0,1),200)
-y <- rnorm(400,x*0.2,1)
-test <- pendensity(y~as.factor(x))
-plot(test)
-
-
-#################
-
-#density-example of the stock exchange Allianz in 2006
-data(Allianz)
-
-form<-'\%d.\%m.\%y'
-
-time.Allianz <- strptime(Allianz[,1],form)
-
-#looking for all dates in 2006
-data.Allianz <- Allianz[which(time.Allianz$year==106),2]
-
-#building differences of first order
-d.Allianz <- diff(data.Allianz)
-
-#estimating the density
-density.Allianz <- pendensity(d.Allianz~1, lambda0=90000)
-plot(density.Allianz)
-}
 
 \keyword{nonparametric}

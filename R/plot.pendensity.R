@@ -1,7 +1,5 @@
 #plotting the estimated density/densities, using the estimated density. Here, it's called 'obj'.
 plot.pendensity <- function(x,plot.val=1,val=NULL,latt=FALSE,kernel=FALSE,confi=TRUE,main=NULL,sub=NULL,xlab=NULL,ylab=NULL,plot.base=FALSE,lwd=NULL,legend.txt=NULL,...) {
-  library(lattice)
-  library(fda)
   obj <- x
   if(plot.val==1) {
     weight <- obj$results$ck
@@ -414,14 +412,12 @@ plot.pendensity <- function(x,plot.val=1,val=NULL,latt=FALSE,kernel=FALSE,confi=
   }
   
 if(plot.val==2) {
-  library("lattice")
   sort <- obj$values$sort
   y.list <- list()
   sum.list <- list()
+  x.factor <- obj$values$covariate$x.factor
+
   if(is.null(obj$values$x)) {
-    knots <- obj$splines$knots
-    beta <- obj$results$beta.val
-    x.factor <- obj$values$covariate$x.factor
     N <- obj$splines$N
     p <- obj$splines$p
     if(sort) {
@@ -448,6 +444,23 @@ if(plot.val==2) {
       datafr <- data.frame(y,sum)
       obj <- xyplot(sum~y,data=datafr,ylab="F(y)",xlab="y",main="Distribution of f(y)")
       print(obj)
+    }
+    if(!is.null(val)) {
+      r.y<-range(obj$values$y)
+      if(any(val<r.y[1])|any(val>r.y[2])) stop("Any value of val outside of the range of the observed values")
+      base.den2<- my.bspline(h=obj$splines$h,q=obj$splines$q,knots.val=obj$splines$knots.val,y=val,K=obj$splines$K-1,plot.bsp=FALSE)$base.den2
+      sum.add <- c(0)
+      for(k in 1:(obj$splines$K-1)) {
+        sum.add <- obj$results$ck[k]*colSums(base.den2[(k:(obj$splines$K)),]) +sum.add
+      }
+      y.list<-list(val)
+      sum.list<-list(sum.add)
+      if(!latt) points(val,sum.add,col=2)
+      else {
+        datafr <- data.frame(val,sum.add)
+        obj <- xyplot(sum~val,data=datafr,ylab="F(val)",xlab="y",main="Distribution of f(val)")
+        print(obj)
+      }
     }
     return(list(y=y.list,sum=sum.list))
   }
@@ -555,7 +568,6 @@ if(plot.val==2) {
     factor <- c()
     eps <- 1e-10
     for(i in 1:all.x2) {
-      print(i)
       w <- c()
       tt <- c()
       if(!is.null(x)) com.h <- x.factor[i,]
@@ -586,17 +598,16 @@ if(plot.val==2) {
         w <- c(w,xi)
         tt <- c(tt,ti)
       }
-      if(latt) {
-        y.lattice <- c(y.lattice,w)
-        sum.lattice <- c(sum.lattice,tt)
-        factor <- c(factor,rep(paste("Distribution-No",i,sep=""),length(tt)))
-      }
+      y.lattice <- c(y.lattice,w)
+      sum.lattice <- c(sum.lattice,tt)
+      factor <- c(factor,rep(paste("Distribution-No",i,sep=""),length(tt)))
       assign(paste("x",i,sep=""),w,envir=func)
       assign(paste("F(x)",i,sep=""),tt,envir=func)
       if(!latt) plot(w,tt,xlab="y",ylab="F(y)",main=paste("Distribution function of f(y|x",i,")",sep=""))
     }
     datafr <- data.frame(y.lattice,sum.lattice,factor)
-    print(xyplot(sum.lattice~y.lattice|factor,data=datafr,xlab="y",ylab="F(y)",autokey=TRUE))
-    
+    if(latt)    print(xyplot(sum.lattice~y.lattice|factor,data=datafr,xlab="y",ylab="F(y)",autokey=TRUE)) 
+    return(datafr)  
   }
 }
+

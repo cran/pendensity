@@ -13,8 +13,8 @@ see the description of the function pendensity.
 \tabular{ll}{
 Package: \tab pendensity\cr
 Type: \tab Package\cr
-Version: \tab 0.2.5\cr
-Date: \tab 2013-02-22\cr
+Version: \tab 0.2.6\cr
+Date: \tab 2014-01-21\cr
 License: GPL (>= 2)
 LazyLoad: \tab yes\cr
 }
@@ -36,7 +36,7 @@ plot(test)
 
 x <- rep(c(0,1),200)
 y <- rnorm(400,x*0.2,1)
-test <- pendensity(y~as.factor(x))
+test <- pendensity(y~as.factor(x),lambda0=2e+07)
 plot(test)
 
 #################
@@ -48,11 +48,9 @@ plot(test,val=c(0,1))
 #################
 
 #density-example of the stock exchange Allianz in 2006
+
 data(Allianz)
-
-form<-'\%d.\%m.\%y'
-
-time.Allianz <- strptime(Allianz[,1],form)
+time.Allianz <- strptime(Allianz[,1],form="\%d.\%m.\%y")
 
 #looking for all dates in 2006
 data.Allianz <- Allianz[which(time.Allianz$year==106),2]

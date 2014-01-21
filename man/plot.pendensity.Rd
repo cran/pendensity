@@ -18,7 +18,7 @@ Plotting estimated penalized densities, need object of class 'pendensity'.
   \item{plot.val}{if plot.val=1 the density is plotted, if plot.val=2
   the distribution function of the observation values is plotted, if
   plot.val=3 the distribution function is plotted as function}
-  \item{val}{vector of y, at which the estimated density should be calculated}
+  \item{val}{vector of y, at which the estimated density should be calculated. If plot.val=2, the calculated values of distribution are returned and the values are pointed in the distribution function of the observed values.}
   \item{latt}{TRUE/FALSE, if TRUE the lattice interface should be used for plotting, default=FALSE}
   \item{kernel}{TRUE/FALSE, if TRUE a kernel density estimation should be added to the density plots, default=FALSE}
   \item{confi}{TRUE/FALSE, if TRUE confidence intervals should be added to the density plots, default=TRUE }
@@ -50,7 +50,7 @@ a list returns with
 \item{sd.up.y.val}{the values of the upper confidence interval of y}
 \item{sd.down.y.val}{the values of the lower confidence interval of y}
 
-If the empirical function is plotted, the function returns
+If the empirical distribution function is plotted, the function returns
 \item{y}{containing the observed values y}
 \item{sum}{containing the empirical distribution of each observation y}
 If the theoretical distribution function is plotted, the function returns an environment. For plotting the theoretical distributions, each interval between two knots is evaluated at 100 equidistant simulated points between the two knots considered. These points are saved in the environment with the name "paste("x",i,sep="")" for each interval i, the calculated distribution is save with the name "paste("F(x)",i,sep="")" for each interval i. For these points, the distribution is calculated. 
@@ -63,7 +63,7 @@ y <- rnorm(100)
 test <- pendensity(y~1)
 plot(test)
 
-#empirical distribution
+#distribution
 plot(test,plot.val=2)
 }
 \keyword{aplot}
