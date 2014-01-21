@@ -1,7 +1,5 @@
-pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=50000,q=3,plot.bsp=FALSE,sort=TRUE,with.border=NULL,m=q,data=parent.frame()) {
+pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=50000,q=3,sort=TRUE,with.border=NULL,m=q,data=parent.frame()) {
   #m <- q-1 #order of penalty
-  library(fda)
-  library(lattice)
   penden.env <- new.env()
   assign("frame",data,penden.env)
   assign("q",q,penden.env)
@@ -93,7 +91,7 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=5000
   }
   
   if(base=="bspline") {
-    base.val<- my.bspline(h,q,knots.val,y,K,plot.bsp)
+    base.val<- my.bspline(h,q,knots.val,y,K,plot.bsp=FALSE)
     help.env <- base.val$help.env
     assign("base.den",base.den <- base.val$base.den,penden.env)
     base.den2 <- base.val$base.den2

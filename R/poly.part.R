@@ -1,6 +1,5 @@
 poly.part <- function(i,j,knots.val,help.env,q,yi=NULL,poly=FALSE) {
   q.sec <- 1:(q+1)
-
   if(!poly) {
     if(is.null(yi)) return(get(paste("INT",i,".",j,sep=""),envir=help.env))
     else {
