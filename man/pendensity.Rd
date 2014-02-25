@@ -6,7 +6,7 @@
 Main program for estimation penalized densities. The estimation can be done for response with or without any covariates. The covariates have to be factors. The response is called 'y', the covariates 'x'. We estimate densities using penalized splines. This done by using a number of knots and a penalty parameter, which are sufficient large. We penalize the m-order differences of the beta-coefficients to estimate the weights 'ck' of the used base functions.
 }
 \usage{
-pendensity(form, base, no.base, max.iter, lambda0, q, sort, with.border, m, data)
+pendensity(form, base, no.base, max.iter, lambda0, q, sort, with.border, m, data,eps)
 }
 
 \arguments{
@@ -23,6 +23,7 @@ pendensity(form, base, no.base, max.iter, lambda0, q, sort, with.border, m, data
   \item{with.border}{determining the number of additional knots on the left and the right of the support of the response. The number of knots 'no.base' is not influenced by this parameter. The amount of knots 'no.base' are placed on the support of the response. The amount of knots determined in 'with.border' is placed outside the support and reduce the amount of knots on the support about its value. Default is NULL.}
   \item{m}{m-th order difference for penalization. Default is m=q.}
   \item{data}{reference to the data. Default reference is the data=parent.frame().}
+  \item{eps}{Level of percentage to determine calculation of optimal lambda, default=0.01}
 }
 \details{
 pendensity() begins with setting the parameters for the estimation. Checking the formula and transferring the data into the program, setting the knots and creating the base, depending on the chosen parameter 'base'. Moreover the penalty matrix is constructed. At the beginning of the first iteration the beta parameter are set equal to zero. With this setup, the first log likelihood is calculated and is used for the first iteration for a new beta parameter.\cr
