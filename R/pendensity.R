@@ -1,4 +1,4 @@
-pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=50000,q=3,sort=TRUE,with.border=NULL,m=q,data=parent.frame()) {
+pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=50000,q=3,sort=TRUE,with.border=NULL,m=q,data=parent.frame(),eps=0.01) {
   #m <- q-1 #order of penalty
   penden.env <- new.env()
   assign("frame",data,penden.env)
@@ -12,8 +12,7 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=5000
   knots.spline <- NULL
   den.form <-  pendenForm(penden.env)
   stand.num <- NULL
-  eps <- 0.01
-  eps2 <- 1e-03
+  #eps2 <- 1e-03
   assign("y",y <-den.form$y,penden.env)
   assign("n",n <- length(get("y",penden.env)),penden.env)
   if(sort) {
@@ -114,41 +113,34 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=5000
   kk <- 1
   listen <- list()
   calc <- TRUE
-  change <- TRUE
-
   L <- L.mat(penden.env)
   D.m(penden.env)
-
   liste.opt[1,1] <- get("lambda0",penden.env)
   
   while(calc) {
     i <- 1
     liste <- matrix(0,2,2+(N*K))
     n.liste <- matrix(0,1,2+(N*K))
-
     assign("beta.val",rep(0,K*N),penden.env)
     assign("ck.temp",ck(penden.env,get("beta.val",penden.env)),penden.env)
     assign("f.hat.val",f.hat(penden.env),penden.env)
-    
     f.hat.val <- get("f.hat.val",penden.env)
     liste[i,3:((N*K)+2)] <- get("beta.val",penden.env)
-    liste[i,2] <- pen.log.like(penden.env,get("lambda0",penden.env),f.hat.val)
-           
+    liste[i,2] <- pen.log.like(penden.env,get("lambda0",penden.env),f.hat.val)      
     i<-2
-
     val <- new.beta.val(liste[i-1,2],penden.env)
-
-    if(val$Likelie) {
+    if(is.na(val$Likelie)) browser()
+    if(!is.na(val$Likelie)) {
       liste[i,2] <- val$Likelie
       liste[i,1] <- val$step
       liste[i,3:((N*K)+2)] <- get("beta.val",penden.env)
     }
-    if(!val$Likelie & kk==1) stop ("Conditioning problem. Restart iteration with new start values")
-    if(!val$Likelie & kk!=1) break
-
+    if(is.na(val$Likelie) & kk==1) stop ("Conditioning problem. Restart iteration with new start values")
+    if(is.na(val$Likelie) & kk!=1) break
     while(liste[i,2]-liste[(i-1),2] > accur) {
       help <- new.beta.val(liste[i,2],penden.env)
-      if(help$Likelie) {
+      #if(is.na(val$Likelie)) browser()
+      if(!is.na(help$Likelie)) {
         i <- i+1
         liste <- rbind(liste,n.liste)
         liste[i,3:((N*K)+2)] <- get("beta.val",penden.env)
@@ -157,33 +149,25 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=5000
       }
       else break
     }
-   
     help.Derv1 <- Derv1(penden.env)
     help.Derv2 <- Derv2(penden.env,get("lambda0",penden.env))
-    
     assign("Derv1.cal",help.Derv1$Derv1.cal,penden.env)
     assign("f.hat.val",help.Derv1$f.hat.val,penden.env)
     assign("Derv2.pen",help.Derv2$Derv2.pen,penden.env)
     assign("Derv2.cal",help.Derv2$Derv2.cal,penden.env)
-    
     l <- length(liste[,1])
     pen.Likelihood <- liste[l,2]
     opt.Likelihood <-pen.log.like(penden.env,get("lambda0",penden.env))
     marg.likeli <- marg.likelihood(penden.env,pen.Likelihood)
-  
     myAIC.help <- my.AIC(penden.env,lambda0=liste.opt[kk,1],opt.Likelihood)
     my.AIC <- myAIC.help$myAIC
-    my.trace <- myAIC.help$mytrace
-    
+    my.trace <- myAIC.help$mytrace    
     liste.opt[kk,2] <- my.AIC
     liste.opt[kk,6:(N*K+5)] <- get("beta.val",penden.env)
     liste.opt[kk,3] <- marg.likeli
     liste.opt[kk,4] <- opt.Likelihood
     liste.opt[kk,5] <- pen.Likelihood
-
-    if(kk>1) if(liste.opt[kk-1,3]/liste.opt[kk,3]<0.975) {
-      #print("jetzt")
-      #print(liste.opt)
+    if(kk>1) if((liste.opt[kk,3]/liste.opt[kk-1,3])<0.9997) {
       calc <- FALSE
       assign("beta.val",liste.opt[kk-1,6:(N*K+5)],penden.env)
       assign("ck.temp",ck(penden.env,get("beta.val",penden.env)),penden.env)
@@ -192,30 +176,22 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=5000
       #print(get("beta.val",penden.env))
       liste.opt <- liste.opt[-kk,]
       listen <- listen[-kk]
-      #print(liste.opt)
       break
     }
-
     listen[[kk]] <- liste
     kk <- kk+1
     help.lambda <- new.lambda(penden.env,lambda0=liste.opt[kk-1,1])
-        
     if(abs(help.lambda-liste.opt[kk-1,1])<eps*liste.opt[kk-1,1] | kk>max.iter) calc <- FALSE
     else {
       if(calc) liste.opt <- rbind(liste.opt,liste.opt.h)
       if(calc) assign("lambda0",liste.opt[kk,1] <- help.lambda,penden.env)
     }
   }
-  
-#print(liste.opt)
-  
+ 
   lambda0 <- get("lambda0",penden.env)
-  
   opt.Likelihood <-pen.log.like(penden.env,lambda0=0)
   marg.likeli <- marg.likelihood(penden.env,pen.Likelihood)
-
   beta.val <- matrix(get("beta.val",penden.env),K,N,byrow=TRUE)
-
   varpar <- variance.par(penden.env)
   biaspar <- bias.par(penden.env)
   

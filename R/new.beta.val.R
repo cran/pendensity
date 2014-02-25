@@ -23,7 +23,6 @@ new.beta.val <- function(llold,penden.env) {
   val <- llold
   step <- 1
   beta.val <- get("beta.val",penden.env)
- 
   #ck.temp <- ck(penden.env,(beta.val-step*c(direc1,direc3,direc2)))
   ck.temp <- ck(penden.env,(beta.val-step*direc.new))
 
@@ -72,7 +71,10 @@ new.beta.val <- function(llold,penden.env) {
   while(calc & step>=1e-6) {
     #if((val2 <- pen.log.like(penden.env,get("lambda0",penden.env),f.hat(penden.env,ck(penden.env,(beta.val-(step/2)*c(direc1,direc3,direc2)))),(beta.val-step*c(direc1,direc3,direc2))))<=val) step <- step/2
     if((val2 <- pen.log.like(penden.env,get("lambda0",penden.env),f.hat(penden.env,ck(penden.env,(beta.val-(step/2)*direc.new))),(beta.val-step*direc.new)))<=val) step <- step/2
-    else calc <- FALSE
+    else {
+      step<-step/2
+      calc <- FALSE
+    }
   }
   #val2<- pen.log.like(penden.env,get("lambda0",penden.env),f.hat(penden.env,ck(penden.env,(beta.val-step*c(direc1,direc3,direc2)))))
   val2<- pen.log.like(penden.env,get("lambda0",penden.env),f.hat(penden.env,ck(penden.env,(beta.val-step*direc.new))))
@@ -92,5 +94,5 @@ new.beta.val <- function(llold,penden.env) {
     assign("Derv2.pen",Derv2.obj$Derv2.pen,penden.env)
     return(list(Likelie=val2,step=step))
   }
-  if(val2<=val) return(list(Likelie=FALSE))
+  if(val2<=val) return(list(Likelie=NA))
 }
