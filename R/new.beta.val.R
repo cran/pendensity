@@ -28,7 +28,6 @@ new.beta.val <- function(llold,penden.env) {
 
   while(any(ck.temp=="Inf")|any(is.na(ck.temp))) {
     step <- step/2
-    #ck.temp <- ck(penden.env,(beta.val-step*c(direc1,direc3,direc2)))
     ck.temp <- ck(penden.env,(beta.val-step*direc.new))
   }
   f.hat.val.temp <- f.hat(penden.env,ck.temp)
@@ -60,25 +59,19 @@ new.beta.val <- function(llold,penden.env) {
 
   while(any(obj5=="Inf")) {
      step <- step/2
-     #ck.temp <- ck(penden.env,(beta.val-step*c(direc1,direc3,direc2)))
      ck.temp <- ck(penden.env,(beta.val-step*direc.new))
      f.hat.val.temp <- f.hat(penden.env,ck.temp)
-     #val2 <- pen.log.like(penden.env,get("lambda0",penden.env),f.hat.val.temp,(beta.val-step*c(direc1,direc3,direc2)))
      val2 <- pen.log.like(penden.env,get("lambda0",penden.env),f.hat.val.temp,(beta.val-step*direc.new))
      obj5 <- f.hat.val.temp
   }
   if(val2>val) calc <- FALSE else calc <- TRUE
   while(calc & step>=1e-6) {
-    #if((val2 <- pen.log.like(penden.env,get("lambda0",penden.env),f.hat(penden.env,ck(penden.env,(beta.val-(step/2)*c(direc1,direc3,direc2)))),(beta.val-step*c(direc1,direc3,direc2))))<=val) step <- step/2
-    if((val2 <- pen.log.like(penden.env,get("lambda0",penden.env),f.hat(penden.env,ck(penden.env,(beta.val-(step/2)*direc.new))),(beta.val-step*direc.new)))<=val) step <- step/2
+    if((val2 <- pen.log.like(penden.env,get("lambda0",penden.env),f.hat(penden.env,ck(penden.env,(beta.val-step*direc.new))),(beta.val-step*direc.new)))<=val) step <- step/2
     else {
-      step<-step/2
       calc <- FALSE
     }
   }
-  #val2<- pen.log.like(penden.env,get("lambda0",penden.env),f.hat(penden.env,ck(penden.env,(beta.val-step*c(direc1,direc3,direc2)))))
   val2<- pen.log.like(penden.env,get("lambda0",penden.env),f.hat(penden.env,ck(penden.env,(beta.val-step*direc.new))))
-  #obj2 <- list(Likelie=FALSE)
   if(val2>val) {
     
     #beta.temp <- beta.val-step*c(direc1,direc3,direc2)

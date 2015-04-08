@@ -17,7 +17,7 @@ pendensity(form, base, no.base, max.iter, lambda0, q, sort, with.border, m, data
   \item{base}{supported bases are "bspline" or "gaussian"}
   \item{no.base}{how many knots 'K', following the approach to use 2'no.base'+1 knots, if 'no.base' is NULL, default is K=41.}
   \item{max.iter}{maximum number of iteration, the default is max.iter=20.}
-  \item{lambda0}{start penalty parameter, the default is lambda0=50000}
+  \item{lambda0}{start penalty parameter, the default is lambda0=500}
   \item{q}{order of B-Spline base, the default is 'q=3'}
   \item{sort}{TRUE or FALSE, if TRUE the response and the covariates should be sorted. Default is TRUE.}
   \item{with.border}{determining the number of additional knots on the left and the right of the support of the response. The number of knots 'no.base' is not influenced by this parameter. The amount of knots 'no.base' are placed on the support of the response. The amount of knots determined in 'with.border' is placed outside the support and reduce the amount of knots on the support about its value. Default is NULL.}

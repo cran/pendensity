@@ -1,2 +1,4 @@
 import(fda,lattice)
 export(pendensity,plot.pendensity,test.equal,print.pendensity)
+S3method(print, pendensity)
+S3method(plot, pendensity)

@@ -1,4 +1,4 @@
-pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=50000,q=3,sort=TRUE,with.border=NULL,m=q,data=parent.frame(),eps=0.01) {
+pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=500,q=3,sort=TRUE,with.border=NULL,m=q,data=parent.frame(),eps=0.01) {
   #m <- q-1 #order of penalty
   penden.env <- new.env()
   assign("frame",data,penden.env)
@@ -167,7 +167,7 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=5000
     liste.opt[kk,3] <- marg.likeli
     liste.opt[kk,4] <- opt.Likelihood
     liste.opt[kk,5] <- pen.Likelihood
-    if(kk>1) if((liste.opt[kk,3]/liste.opt[kk-1,3])<0.9997) {
+    if(kk>2) if(abs(liste.opt[kk,3]/liste.opt[kk-1,3]-1)<0.005) {
       calc <- FALSE
       assign("beta.val",liste.opt[kk-1,6:(N*K+5)],penden.env)
       assign("ck.temp",ck(penden.env,get("beta.val",penden.env)),penden.env)
