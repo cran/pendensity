@@ -10,7 +10,7 @@ Plotting estimated penalized densities, need object of class 'pendensity'.
 \usage{
 \method{plot}{pendensity}(x, plot.val = 1, val=NULL, latt = FALSE, kernel = FALSE, confi = TRUE,
  main = NULL, sub = NULL, xlab = NULL, ylab = NULL, plot.base = FALSE,
- lwd=NULL,legend.txt=NULL,...)
+ lwd=NULL,legend.txt=NULL,plot.dens=TRUE,...)
 }
 
 \arguments{
@@ -31,6 +31,7 @@ Plotting estimated penalized densities, need object of class 'pendensity'.
   \item{legend.txt}{if FALSE no legend is plotted, legend.txt can get a
   vector of characters with length of the groupings. legend.txt works
   only for plot.val=1}
+  \item{plot.dens}{TRUE/FALSE, if the estimated density should be plotted. Default=TRUE. Interesting for evaluating densities in values 'val', while this special plot is not needed.}
   \item{...}{further arguments}
 }
 \details{

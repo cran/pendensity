@@ -1,5 +1,6 @@
 #plotting the estimated density/densities, using the estimated density. Here, it's called 'obj'.
-plot.pendensity <- function(x,plot.val=1,val=NULL,latt=FALSE,kernel=FALSE,confi=TRUE,main=NULL,sub=NULL,xlab=NULL,ylab=NULL,plot.base=FALSE,lwd=NULL,legend.txt=NULL,...) {
+plot.pendensity <- function(x,plot.val=1,val=NULL,latt=FALSE,kernel=FALSE,confi=TRUE,main=NULL,sub=NULL,xlab=NULL,ylab=NULL,
+               plot.base=FALSE,lwd=NULL,legend.txt=NULL,plot.dens=TRUE,...) {
   obj <- x
   if(plot.val==1) {
     weight <- obj$results$ck
@@ -309,7 +310,7 @@ plot.pendensity <- function(x,plot.val=1,val=NULL,latt=FALSE,kernel=FALSE,confi=
     x.range.add <- 0.05*diff(x.range)
     x.lim <- c(x.range[1]-x.range.add,x.range[2]+x.range.add)
 
-    if(plot.val==1 & latt==FALSE) {
+    if(plot.val==1 & latt==FALSE & plot.dens) {
       y.temp <- obj$values$y
       if(is.null(obj$values$x)) plot(y.temp, dnorm(y.temp,mean=0,sd=1),xlab=xlab.title,ylab=ylab.title,xlim=x.lim,ylim=c(0,max(max(get("conf.plus1",help.env)),max.kern,max.bsp)),type="n", main=main.title, sub=sub.title,cex.axis=1.2,cex.lab=1.5,cex.main=1.8)
       
@@ -349,7 +350,7 @@ plot.pendensity <- function(x,plot.val=1,val=NULL,latt=FALSE,kernel=FALSE,confi=
       }
     }
     
-    if(plot.val==1 & latt==TRUE) {
+    if(plot.val==1 & latt==TRUE &plot.dens) {
       main.title <- as.expression(main.title)
       y <- c()
       fy <- c()
@@ -439,8 +440,8 @@ if(plot.val==2) {
     y <- sort(y)
     y.list[[1]] <- y
     sum.list[[1]] <- sum
-    if(!latt) plot(y,sum,xlab="y",ylab="F(y)",main="Distribution of f(y)")
-    else {
+    if(!latt&plot.dens) plot(y,sum,xlab="y",ylab="F(y)",main="Distribution of f(y)")
+    if(latt&plot.dens) {
       datafr <- data.frame(y,sum)
       obj <- xyplot(sum~y,data=datafr,ylab="F(y)",xlab="y",main="Distribution of f(y)")
       print(obj)
@@ -455,8 +456,8 @@ if(plot.val==2) {
       }
       y.list<-list(val)
       sum.list<-list(sum.add)
-      if(!latt) points(val,sum.add,col=2)
-      else {
+      if(!latt&plot.dens) points(val,sum.add,col=2)
+      if(latt&plot.dens) {
         datafr <- data.frame(val,sum.add)
         obj <- xyplot(sum~val,data=datafr,ylab="F(val)",xlab="y",main="Distribution of f(val)")
         print(obj)
@@ -538,11 +539,11 @@ if(plot.val==2) {
         else {
           y.call[[j]] <- get(paste("y.later",j,sep=""),envir=help.env)
           sum.list[[j]] <- sum
-          plot(get(paste("y.later",j,sep=""),envir=help.env),sum,xlab="y",ylab=paste("F(y|x",j,")",sep=""),main=paste("Distribution of f(y|x",j,")",sep=""))
+          if(plot.dens) plot(get(paste("y.later",j,sep=""),envir=help.env),sum,xlab="y",ylab=paste("F(y|x",j,")",sep=""),main=paste("Distribution of f(y|x",j,")",sep=""))
         }
       }  
     }
-    if(latt) {
+    if(latt&plot.dens) {
       datafr <- data.frame(y.lattice,sum.lattice,factor)
       print(xyplot(sum.lattice~y.lattice|factor,data=datafr,xlab="y",ylab="F(y)",autokey=TRUE))
     }
@@ -603,10 +604,10 @@ if(plot.val==2) {
       factor <- c(factor,rep(paste("Distribution-No",i,sep=""),length(tt)))
       assign(paste("x",i,sep=""),w,envir=func)
       assign(paste("F(x)",i,sep=""),tt,envir=func)
-      if(!latt) plot(w,tt,xlab="y",ylab="F(y)",main=paste("Distribution function of f(y|x",i,")",sep=""))
+      if(!latt&plot.dens) plot(w,tt,xlab="y",ylab="F(y)",main=paste("Distribution function of f(y|x",i,")",sep=""))
     }
     datafr <- data.frame(y.lattice,sum.lattice,factor)
-    if(latt)    print(xyplot(sum.lattice~y.lattice|factor,data=datafr,xlab="y",ylab="F(y)",autokey=TRUE)) 
+    if(latt&plot.dens)    print(xyplot(sum.lattice~y.lattice|factor,data=datafr,xlab="y",ylab="F(y)",autokey=TRUE)) 
     return(datafr)  
   }
 }
