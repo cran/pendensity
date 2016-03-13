@@ -13,8 +13,8 @@ see the description of the function pendensity.
 \tabular{ll}{
 Package: \tab pendensity\cr
 Type: \tab Package\cr
-Version: \tab 0.2.9\cr
-Date: \tab 2016-03-01\cr
+Version: \tab 0.2.10\cr
+Date: \tab 2016-03-13\cr
 License: GPL (>= 2)
 LazyLoad: \tab yes\cr
 }

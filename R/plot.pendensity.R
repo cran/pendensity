@@ -421,15 +421,9 @@ if(plot.val==2) {
   if(is.null(obj$values$x)) {
     N <- obj$splines$N
     p <- obj$splines$p
-    if(sort) {
-      y <- obj$values$y
-      base.den2 <- obj$splines$base.den2
-    }
-    else {
-      y.order <- order(obj$values$y)
-      y <- obj$values$y[y.order]
-      base.den2 <- obj$splines$base.den2[,y.order]
-    }
+    y <- obj$values$y
+    base.den2 <- obj$splines$base.den2
+    y.order <- order(obj$values$y)
     K <- length(base.den2[,1])-1
     weight <- c(obj$results$ck)
     row.help <- rep(0,length(base.den2[1,]))
@@ -437,29 +431,36 @@ if(plot.val==2) {
     for(k in 1:K) {
       sum <- weight[k]*colSums(base.den2[(k:(K+1)),]) +sum
     }
-    y <- sort(y)
+    #y<-sort(y)
     y.list[[1]] <- y
     sum.list[[1]] <- sum
-    if(!latt&plot.dens) plot(y,sum,xlab="y",ylab="F(y)",main="Distribution of f(y)")
+    if(!latt&plot.dens) plot(sort(y),sum,xlab="y",ylab="F(y)",main="Distribution of f(y)")
     if(latt&plot.dens) {
       datafr <- data.frame(y,sum)
-      obj <- xyplot(sum~y,data=datafr,ylab="F(y)",xlab="y",main="Distribution of f(y)")
+      obj <- xyplot(sum~sort(y),data=datafr,ylab="F(y)",xlab="y",main="Distribution of f(y)")
       print(obj)
     }
     if(!is.null(val)) {
-      r.y<-range(obj$values$y)
-      if(any(val<r.y[1])|any(val>r.y[2])) stop("Any value of val outside of the range of the observed values")
-      base.den2<- my.bspline(h=obj$splines$h,q=obj$splines$q,knots.val=obj$splines$knots.val,y=val,K=obj$splines$K-1,plot.bsp=FALSE)$base.den2
+      r.y<-range(obj$splines$knots.val$val)
+      val<-sort(val)
+      if(any(val<r.y[1])|any(val>r.y[2])) {
+          print("Any value of val outside of the range of the observed values, extended with 0 at the left and 1 at the right of the interval of observed values")
+          ind<-which(val>=r.y[1]&val<=r.y[2])
+      }
+      else ind<-c(1:length(val))
+      base.den2<- my.bspline(h=obj$splines$h,q=obj$splines$q,knots.val=obj$splines$knots.val,y=val[ind],K=obj$splines$K-1,plot.bsp=FALSE)$base.den2
       sum.add <- c(0)
       for(k in 1:(obj$splines$K-1)) {
-        sum.add <- obj$results$ck[k]*colSums(base.den2[(k:(obj$splines$K)),]) +sum.add
+        sum.add <- obj$results$ck[k]*colSums(base.den2[(k:(obj$splines$K+1)),]) +sum.add
       }
+      if(any(val<r.y[1])) sum.add<-c(rep(0,length(which(val<r.y[1]))),sum.add)
+      if(any(val>r.y[2])) sum.add<-c(sum.add,rep(1,length(which(val>r.y[2]))))
       y.list<-list(val)
       sum.list<-list(sum.add)
       if(!latt&plot.dens) points(val,sum.add,col=2)
       if(latt&plot.dens) {
         datafr <- data.frame(val,sum.add)
-        obj <- xyplot(sum~val,data=datafr,ylab="F(val)",xlab="y",main="Distribution of f(val)")
+        obj <- xyplot(sum.add~val,data=datafr,ylab="F(val)",xlab="y",main="Distribution of f(val)")
         print(obj)
       }
     }
