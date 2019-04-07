@@ -27,7 +27,7 @@ my.bspline <- function(h,q,knots.val,y,K,plot.bsp) {
   }
   base.den <- stand.num*base.den
   
-  len.b <- length(base.den[,1])
+  if(length(y)>1) len.b <- length(base.den[,1]) else len.b<-length(base.den)
 
   #printing
   if(plot.bsp==TRUE) {

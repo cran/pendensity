@@ -116,7 +116,6 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=500,
   L <- L.mat(penden.env)
   D.m(penden.env)
   liste.opt[1,1] <- get("lambda0",penden.env)
-  
   while(calc) {
     i <- 1
     liste <- matrix(0,2,2+(N*K))
@@ -129,17 +128,18 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=500,
     liste[i,2] <- pen.log.like(penden.env,get("lambda0",penden.env),f.hat.val)      
     i<-2
     val <- new.beta.val(liste[i-1,2],penden.env)
-    if(is.na(val$Likelie)) browser()
     if(!is.na(val$Likelie)) {
       liste[i,2] <- val$Likelie
       liste[i,1] <- val$step
       liste[i,3:((N*K)+2)] <- get("beta.val",penden.env)
     }
     if(is.na(val$Likelie) & kk==1) stop ("Conditioning problem. Restart iteration with new start values")
-    if(is.na(val$Likelie) & kk!=1) break
-    while(liste[i,2]-liste[(i-1),2] > accur) {
+    if(is.na(val$Likelie) & kk!=1) stop ("Conditioning problem. Restart 
+iteration with new start values")
+    while((liste[i,2]-liste[(i-1),2] > accur) & 
+(liste[(i-1),2]>liste[i,2])) {
+    print(c(i,liste[i,2]-liste[(i-1)]))
       help <- new.beta.val(liste[i,2],penden.env)
-      #if(is.na(val$Likelie)) browser()
       if(!is.na(help$Likelie)) {
         i <- i+1
         liste <- rbind(liste,n.liste)
@@ -147,7 +147,6 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=500,
         liste[i,2] <- help$Likelie
         liste[i,1] <- help$step
       }
-      else break
     }
     help.Derv1 <- Derv1(penden.env)
     help.Derv2 <- Derv2(penden.env,get("lambda0",penden.env))
@@ -167,25 +166,28 @@ pendensity <- function(form,base="bspline",no.base=NULL,max.iter=20,lambda0=500,
     liste.opt[kk,3] <- marg.likeli
     liste.opt[kk,4] <- opt.Likelihood
     liste.opt[kk,5] <- pen.Likelihood
-    if(kk>2) if(abs(liste.opt[kk,3]/liste.opt[kk-1,3]-1)<0.005) {
-      calc <- FALSE
-      assign("beta.val",liste.opt[kk-1,6:(N*K+5)],penden.env)
-      assign("ck.temp",ck(penden.env,get("beta.val",penden.env)),penden.env)
-      assign("f.hat.val",f.hat(penden.env),penden.env)
-      assign("lambda0",liste.opt[kk-1,1],penden.env)
-      #print(get("beta.val",penden.env))
-      liste.opt <- liste.opt[-kk,]
-      listen <- listen[-kk]
-      break
+    print(kk)
+    if(kk>2) {
+      if(abs(liste.opt[kk,3]/liste.opt[kk-1,3]-1)<0.005) {
+        calc <- FALSE
+        assign("beta.val",liste.opt[kk-1,6:(N*K+5)],penden.env)
+        assign("ck.temp",ck(penden.env,get("beta.val",penden.env)),penden.env)
+        assign("f.hat.val",f.hat(penden.env),penden.env)
+        assign("lambda0",liste.opt[kk-1,1],penden.env)
+        #liste.opt <- liste.opt[-kk,]
+        #listen <- listen[-kk]
+      }
     }
     listen[[kk]] <- liste
     kk <- kk+1
     help.lambda <- new.lambda(penden.env,lambda0=liste.opt[kk-1,1])
-    if(abs(help.lambda-liste.opt[kk-1,1])<eps*liste.opt[kk-1,1] | kk>max.iter) calc <- FALSE
-    else {
-      if(calc) liste.opt <- rbind(liste.opt,liste.opt.h)
-      if(calc) assign("lambda0",liste.opt[kk,1] <- help.lambda,penden.env)
-    }
+    if(abs(help.lambda-liste.opt[kk-1,1])<eps*liste.opt[kk-1,1] | 
+kk>max.iter) calc <- FALSE
+        else {
+          if(calc) liste.opt <- rbind(liste.opt,liste.opt.h)
+          if(calc) assign("lambda0",liste.opt[kk,1] <- help.lambda,penden.env)
+        }
+      
   }
  
   lambda0 <- get("lambda0",penden.env)

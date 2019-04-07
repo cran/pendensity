@@ -8,8 +8,6 @@ new.beta.val <- function(llold,penden.env) {
   Derv2.obj <- Derv2(penden.env,get("lambda0",penden.env))
 #####
   Derv2.invers <- -my.positive.definite.solve(Derv2.obj$Derv2.pen)
-  #Derv2.pen <- Derv2.obj$Derv2.pen
-  #Derv2.cal <- Derv2.obj$Derv2.cal
   beta.val <- get("beta.val",penden.env)
   direc <- Derv2.invers%*%Derv1.obj$Derv1.pen
   #val1 <- seq(1:((M-1)*N))
@@ -43,16 +41,13 @@ new.beta.val <- function(llold,penden.env) {
     val2 <- pen.log.like(penden.env,get("lambda0",penden.env),f.hat.val.temp,(beta.val-step*direc.new))
   }
 
-  while(val2=="NaN") {
-    if (step > 1e-15) {
+  while(val2=="NaN" & step > 1e-15) {
       step <- step/2
       #ck.temp <- ck(penden.env,(beta.val-step*c(direc1,direc3,direc2)))
       ck.temp <- ck(penden.env,(beta.val-step*direc.new))
       f.hat.val.temp <- f.hat(penden.env,ck.temp)
       #val2 <- pen.log.like(penden.env,get("lambda0",penden.env),f.hat.val.temp,(beta.val-step*c(direc1,direc3,direc2)))
       val2 <- pen.log.like(penden.env,get("lambda0",penden.env),f.hat.val.temp,(beta.val-step*direc.new))
-   }
-    else {break}
   }
   index <- matrix(1:length(ck.temp),length(ck.temp[,1]),K,byrow=TRUE)
   obj5 <- f.hat.val.temp^2
@@ -71,6 +66,7 @@ new.beta.val <- function(llold,penden.env) {
       calc <- FALSE
     }
   }
+
   val2<- pen.log.like(penden.env,get("lambda0",penden.env),f.hat(penden.env,ck(penden.env,(beta.val-step*direc.new))))
   if(val2>val) {
     

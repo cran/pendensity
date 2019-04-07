@@ -1,5 +1,5 @@
 test.equal <- function(obj) {
-  if(!inherits(obj, "pendensity")) break("Not a object of class pendensity")
+  if(!inherits(obj, "pendensity")) stop("Not a object of class pendensity")
   if(is.null(obj$values$x)) stop("The input is an univariate pendensity-object. Nothing to test")
   help.env <- distr.func.help(obj)
   K <- obj$splines$K

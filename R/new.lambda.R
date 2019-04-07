@@ -13,20 +13,17 @@ new.lambda <- function(penden.env,lambda0) {
   u <- t(beta.val.help)%*%get("Dm",penden.env)%*%beta.val.help
   hh <-1
   while(calc) {
-    if(hh==11) break
-    
     Derv2.tmp <- Derv2(penden.env,lambda[hh])
     df <- sum(diag(my.positive.definite.solve(Derv2.tmp$Derv2.pen)%*%Derv2.tmp$Derv2.cal))
 
-    if(df-(p*(m-1)) < epsdf) break
-      #{print("df kleiner m-1+epsdf")
+    if(df-(p*(m-1)) < epsdf) return(lambda[hh])
      
     
     df<- df-(p*(m-1))
 
     help <- abs(df/u - lambda[hh])
-    if((df/u)<0) break
-    if(help<eps) calc <- FALSE else {
+    if((df/u)<0) return(lambda[hh])
+    if(help<eps|hh>11) calc <- FALSE else {
       lambda[hh+1] <- df/u
       hh <- hh+1
     }

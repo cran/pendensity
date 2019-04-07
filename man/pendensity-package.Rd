@@ -13,14 +13,14 @@ see the description of the function pendensity.
 \tabular{ll}{
 Package: \tab pendensity\cr
 Type: \tab Package\cr
-Version: \tab 0.2.10\cr
-Date: \tab 2016-03-13\cr
+Version: \tab 0.2.12\cr
+Date: \tab 2019-04-07\cr
 License: GPL (>= 2)
 LazyLoad: \tab yes\cr
 }
 The packages contributes the function 'pendensity()' for estimating densities using penalized splines techniques. 
 }
-\author{Christian Schellhase <cschellhase@wiwi.uni-bielefeld.de>}
+\author{Christian Schellhase <christian.schellhase@gmx.net>}
 
 \references{Density Estimation with a Penalized Mixture Approach, Schellhase C. and Kauermann G. (2012), Computational Statistics 27 (4), p. 757-777.}
 \keyword{nonparametric}
